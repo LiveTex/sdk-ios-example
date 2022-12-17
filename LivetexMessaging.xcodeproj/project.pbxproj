@@ -1,0 +1,732 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		156A44ADDAA1BF38B1BE28D4 /* Pods_LivetexMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C5EF1AC062AF49B3219BFDC /* Pods_LivetexMessaging.framework */; };
+		6105876B24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105876A24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift */; };
+		6105876D249692EF00B9CBDF /* SystemMessageSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6105876C249692EF00B9CBDF /* SystemMessageSizeCalculator.swift */; };
+		610600BD24A94DA000D056F8 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610600BC24A94DA000D056F8 /* Settings.swift */; };
+		6125A1192474716B00A92C0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A1182474716B00A92C0D /* AppDelegate.swift */; };
+		6125A1202474716B00A92C0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6125A11E2474716B00A92C0D /* Main.storyboard */; };
+		6125A1222474716E00A92C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6125A1212474716E00A92C0D /* Assets.xcassets */; };
+		6125A1252474716E00A92C0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6125A1232474716E00A92C0D /* LaunchScreen.storyboard */; };
+		6125A1352474735500A92C0D /* OperatorAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A1322474735500A92C0D /* OperatorAvatarView.swift */; };
+		6125A1362474735500A92C0D /* DialogueStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A1332474735500A92C0D /* DialogueStateView.swift */; };
+		6125A1392474739400A92C0D /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A1382474739400A92C0D /* ChatViewController.swift */; };
+		6125A1502474748E00A92C0D /* DateFormatter+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A1402474748E00A92C0D /* DateFormatter+Factory.swift */; };
+		6125A15E2474760B00A92C0D /* ChatViewModel+Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A15C2474760B00A92C0D /* ChatViewModel+Messages.swift */; };
+		6125A15F2474760B00A92C0D /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6125A15D2474760B00A92C0D /* ChatViewModel.swift */; };
+		6167342B248B960600A6930F /* UIAlertController+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167342A248B960600A6930F /* UIAlertController+Factory.swift */; };
+		6167342E248BA64400A6930F /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167342D248BA64400A6930F /* UIColor+Hex.swift */; };
+		61673430248BA66000A6930F /* UIColor+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167342F248BA66000A6930F /* UIColor+Factory.swift */; };
+		61673434248D1D3A00A6930F /* TextMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61673433248D1D3A00A6930F /* TextMessageCollectionViewCell.swift */; };
+		61673437248D32DA00A6930F /* CustomMessagesFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61673436248D32DA00A6930F /* CustomMessagesFlowLayout.swift */; };
+		61673439248D48D800A6930F /* CustomMessagesCollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61673438248D48D800A6930F /* CustomMessagesCollectionViewLayoutAttributes.swift */; };
+		6167343C248D63B200A6930F /* UIEdgeInsets+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167343B248D63B200A6930F /* UIEdgeInsets+Factory.swift */; };
+		6167343E248D6FEE00A6930F /* CustomTextMessageSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167343D248D6FEE00A6930F /* CustomTextMessageSizeCalculator.swift */; };
+		618B621C24ABCEB500CD46BB /* EstimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B621B24ABCEB500CD46BB /* EstimationView.swift */; };
+		618B621E24ABD03300CD46BB /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B621D24ABD03300CD46BB /* Assets.swift */; };
+		618B622124ABD26000CD46BB /* UIImage+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B622024ABD26000CD46BB /* UIImage+Asset.swift */; };
+		618B622B24AE705D00CD46BB /* Data+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B622A24AE705D00CD46BB /* Data+Hex.swift */; };
+		618B623324B2350100CD46BB /* FollowMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B623224B2350100CD46BB /* FollowMessageView.swift */; };
+		618B623724B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B623624B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift */; };
+		618B623924B3882A00CD46BB /* FollowTextMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B623824B3882A00CD46BB /* FollowTextMessageCollectionViewCell.swift */; };
+		618B623B24B3C35700CD46BB /* MessageInputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B623A24B3C35700CD46BB /* MessageInputBarView.swift */; };
+		61F0308C24A3E4F1006FF160 /* DebouncedFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F0308B24A3E4F1006FF160 /* DebouncedFunction.swift */; };
+		61FE189424D0886500BF90F6 /* ActionsReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FE189324D0886500BF90F6 /* ActionsReusableView.swift */; };
+		84E71EE0294C25E90022995B /* LivetexCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84E71EDF294C25E90022995B /* LivetexCore */; };
+		FF0312F5281C4B24001144AD /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0312F4281C4B24001144AD /* ConnectionView.swift */; };
+		FF031402281D9E8A001144AD /* String+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF031401281D9E8A001144AD /* String+Size.swift */; };
+		FF30F31E27306D8D006EE916 /* UIResponder+First.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF30F31D27306D8D006EE916 /* UIResponder+First.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		61AC18DF250240AF006F3942 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2AACDEDDF06D6BA089F2E005 /* Pods-LivetexMessaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivetexMessaging.release.xcconfig"; path = "Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging.release.xcconfig"; sourceTree = "<group>"; };
+		6105876A24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		6105876C249692EF00B9CBDF /* SystemMessageSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessageSizeCalculator.swift; sourceTree = "<group>"; };
+		610600BC24A94DA000D056F8 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		6125A1152474716B00A92C0D /* LivetexMessaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LivetexMessaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6125A1182474716B00A92C0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6125A11F2474716B00A92C0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6125A1212474716E00A92C0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6125A1242474716E00A92C0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6125A1262474716E00A92C0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6125A1322474735500A92C0D /* OperatorAvatarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorAvatarView.swift; sourceTree = "<group>"; };
+		6125A1332474735500A92C0D /* DialogueStateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueStateView.swift; sourceTree = "<group>"; };
+		6125A1382474739400A92C0D /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		6125A1402474748E00A92C0D /* DateFormatter+Factory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Factory.swift"; sourceTree = "<group>"; };
+		6125A15C2474760B00A92C0D /* ChatViewModel+Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewModel+Messages.swift"; sourceTree = "<group>"; };
+		6125A15D2474760B00A92C0D /* ChatViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		6167342A248B960600A6930F /* UIAlertController+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Factory.swift"; sourceTree = "<group>"; };
+		6167342D248BA64400A6930F /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		6167342F248BA66000A6930F /* UIColor+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Factory.swift"; sourceTree = "<group>"; };
+		61673433248D1D3A00A6930F /* TextMessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		61673436248D32DA00A6930F /* CustomMessagesFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesFlowLayout.swift; sourceTree = "<group>"; };
+		61673438248D48D800A6930F /* CustomMessagesCollectionViewLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessagesCollectionViewLayoutAttributes.swift; sourceTree = "<group>"; };
+		6167343B248D63B200A6930F /* UIEdgeInsets+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Factory.swift"; sourceTree = "<group>"; };
+		6167343D248D6FEE00A6930F /* CustomTextMessageSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextMessageSizeCalculator.swift; sourceTree = "<group>"; };
+		618B621B24ABCEB500CD46BB /* EstimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimationView.swift; sourceTree = "<group>"; };
+		618B621D24ABD03300CD46BB /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		618B622024ABD26000CD46BB /* UIImage+Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Asset.swift"; sourceTree = "<group>"; };
+		618B622A24AE705D00CD46BB /* Data+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Hex.swift"; sourceTree = "<group>"; };
+		618B623224B2350100CD46BB /* FollowMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowMessageView.swift; sourceTree = "<group>"; };
+		618B623624B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTextMessageSizeCalculator.swift; sourceTree = "<group>"; };
+		618B623824B3882A00CD46BB /* FollowTextMessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTextMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		618B623A24B3C35700CD46BB /* MessageInputBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputBarView.swift; sourceTree = "<group>"; };
+		61D693A824BBBFC90070B3D7 /* LivetexMessaging.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = LivetexMessaging.entitlements; sourceTree = "<group>"; };
+		61F0308B24A3E4F1006FF160 /* DebouncedFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedFunction.swift; sourceTree = "<group>"; };
+		61FE189324D0886500BF90F6 /* ActionsReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsReusableView.swift; sourceTree = "<group>"; };
+		6C5EF1AC062AF49B3219BFDC /* Pods_LivetexMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LivetexMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D93B122FDADFB26DE38B9D86 /* Pods-LivetexMessaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivetexMessaging.debug.xcconfig"; path = "Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging.debug.xcconfig"; sourceTree = "<group>"; };
+		FF0312F4281C4B24001144AD /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
+		FF031401281D9E8A001144AD /* String+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Size.swift"; sourceTree = "<group>"; };
+		FF30F31D27306D8D006EE916 /* UIResponder+First.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+First.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6125A1122474716B00A92C0D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				156A44ADDAA1BF38B1BE28D4 /* Pods_LivetexMessaging.framework in Frameworks */,
+				84E71EE0294C25E90022995B /* LivetexCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		610600BB24A94D0100D056F8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				61F0308B24A3E4F1006FF160 /* DebouncedFunction.swift */,
+				610600BC24A94DA000D056F8 /* Settings.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		6125A10C2474716B00A92C0D = {
+			isa = PBXGroup;
+			children = (
+				6125A1172474716B00A92C0D /* LivetexMessaging */,
+				6125A1162474716B00A92C0D /* Products */,
+				CF939B5E615AC1797200BF3E /* Pods */,
+				9A024361532872214D07A071 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		6125A1162474716B00A92C0D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6125A1152474716B00A92C0D /* LivetexMessaging.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6125A1172474716B00A92C0D /* LivetexMessaging */ = {
+			isa = PBXGroup;
+			children = (
+				6125A12E2474725700A92C0D /* AppDelegate */,
+				6125A13E2474748E00A92C0D /* Extensions */,
+				61673435248D32B100A6930F /* Layout */,
+				61D693A824BBBFC90070B3D7 /* LivetexMessaging.entitlements */,
+				6125A12C2474722600A92C0D /* Resources */,
+				610600BB24A94D0100D056F8 /* Settings */,
+				6125A12D2474724E00A92C0D /* ViewControllers */,
+				6125A15B247475EC00A92C0D /* ViewModel */,
+				6125A1302474732500A92C0D /* Views */,
+			);
+			path = LivetexMessaging;
+			sourceTree = "<group>";
+		};
+		6125A12C2474722600A92C0D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				618B621D24ABD03300CD46BB /* Assets.swift */,
+				6125A1212474716E00A92C0D /* Assets.xcassets */,
+				6125A1262474716E00A92C0D /* Info.plist */,
+				6125A1232474716E00A92C0D /* LaunchScreen.storyboard */,
+				6125A11E2474716B00A92C0D /* Main.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6125A12D2474724E00A92C0D /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6125A1382474739400A92C0D /* ChatViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		6125A12E2474725700A92C0D /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				6125A1182474716B00A92C0D /* AppDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		6125A1302474732500A92C0D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FF2CB28C2714AB1200287117 /* Custom Cells */,
+				61FE189324D0886500BF90F6 /* ActionsReusableView.swift */,
+				618B621B24ABCEB500CD46BB /* EstimationView.swift */,
+				618B623A24B3C35700CD46BB /* MessageInputBarView.swift */,
+				6125A1322474735500A92C0D /* OperatorAvatarView.swift */,
+				61673433248D1D3A00A6930F /* TextMessageCollectionViewCell.swift */,
+				6125A1332474735500A92C0D /* DialogueStateView.swift */,
+				FF0312F4281C4B24001144AD /* ConnectionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6125A13E2474748E00A92C0D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FF031400281D9E82001144AD /* String */,
+				FF30F31C27306D22006EE916 /* UIResponder */,
+				618B622924AE704600CD46BB /* Data */,
+				6125A13F2474748E00A92C0D /* DateFormatter */,
+				61673429248B95EA00A6930F /* UIAlertController */,
+				6167342C248BA62500A6930F /* UIColor */,
+				6167343A248D639800A6930F /* UIEdgeInsets */,
+				618B621F24ABD24900CD46BB /* UIImage */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6125A13F2474748E00A92C0D /* DateFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				6125A1402474748E00A92C0D /* DateFormatter+Factory.swift */,
+			);
+			path = DateFormatter;
+			sourceTree = "<group>";
+		};
+		6125A15B247475EC00A92C0D /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6125A15D2474760B00A92C0D /* ChatViewModel.swift */,
+				6125A15C2474760B00A92C0D /* ChatViewModel+Messages.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		61673429248B95EA00A6930F /* UIAlertController */ = {
+			isa = PBXGroup;
+			children = (
+				6167342A248B960600A6930F /* UIAlertController+Factory.swift */,
+			);
+			path = UIAlertController;
+			sourceTree = "<group>";
+		};
+		6167342C248BA62500A6930F /* UIColor */ = {
+			isa = PBXGroup;
+			children = (
+				6167342D248BA64400A6930F /* UIColor+Hex.swift */,
+				6167342F248BA66000A6930F /* UIColor+Factory.swift */,
+			);
+			path = UIColor;
+			sourceTree = "<group>";
+		};
+		61673435248D32B100A6930F /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				61673438248D48D800A6930F /* CustomMessagesCollectionViewLayoutAttributes.swift */,
+				61673436248D32DA00A6930F /* CustomMessagesFlowLayout.swift */,
+				6167343D248D6FEE00A6930F /* CustomTextMessageSizeCalculator.swift */,
+				618B623624B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift */,
+				6105876C249692EF00B9CBDF /* SystemMessageSizeCalculator.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
+		6167343A248D639800A6930F /* UIEdgeInsets */ = {
+			isa = PBXGroup;
+			children = (
+				6167343B248D63B200A6930F /* UIEdgeInsets+Factory.swift */,
+			);
+			path = UIEdgeInsets;
+			sourceTree = "<group>";
+		};
+		618B621F24ABD24900CD46BB /* UIImage */ = {
+			isa = PBXGroup;
+			children = (
+				618B622024ABD26000CD46BB /* UIImage+Asset.swift */,
+			);
+			path = UIImage;
+			sourceTree = "<group>";
+		};
+		618B622924AE704600CD46BB /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				618B622A24AE705D00CD46BB /* Data+Hex.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		9A024361532872214D07A071 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C5EF1AC062AF49B3219BFDC /* Pods_LivetexMessaging.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CF939B5E615AC1797200BF3E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D93B122FDADFB26DE38B9D86 /* Pods-LivetexMessaging.debug.xcconfig */,
+				2AACDEDDF06D6BA089F2E005 /* Pods-LivetexMessaging.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		FF031400281D9E82001144AD /* String */ = {
+			isa = PBXGroup;
+			children = (
+				FF031401281D9E8A001144AD /* String+Size.swift */,
+			);
+			path = String;
+			sourceTree = "<group>";
+		};
+		FF2CB28C2714AB1200287117 /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				6105876A24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift */,
+				FF2CB28D2714AB3300287117 /* FollowMessageCell */,
+			);
+			path = "Custom Cells";
+			sourceTree = "<group>";
+		};
+		FF2CB28D2714AB3300287117 /* FollowMessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				618B623224B2350100CD46BB /* FollowMessageView.swift */,
+				618B623824B3882A00CD46BB /* FollowTextMessageCollectionViewCell.swift */,
+			);
+			path = FollowMessageCell;
+			sourceTree = "<group>";
+		};
+		FF30F31C27306D22006EE916 /* UIResponder */ = {
+			isa = PBXGroup;
+			children = (
+				FF30F31D27306D8D006EE916 /* UIResponder+First.swift */,
+			);
+			path = UIResponder;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6125A1142474716B00A92C0D /* LivetexMessaging */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6125A1292474716E00A92C0D /* Build configuration list for PBXNativeTarget "LivetexMessaging" */;
+			buildPhases = (
+				B07C3AFE8C69F051FAE1B3C7 /* [CP] Check Pods Manifest.lock */,
+				6125A1112474716B00A92C0D /* Sources */,
+				6125A1122474716B00A92C0D /* Frameworks */,
+				6125A1132474716B00A92C0D /* Resources */,
+				B599BB4949194246BF93101C /* [CP] Embed Pods Frameworks */,
+				61AC18DF250240AF006F3942 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LivetexMessaging;
+			packageProductDependencies = (
+				84E71EDF294C25E90022995B /* LivetexCore */,
+			);
+			productName = LivetexMessaging;
+			productReference = 6125A1152474716B00A92C0D /* LivetexMessaging.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6125A10D2474716B00A92C0D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1140;
+				LastUpgradeCheck = 1140;
+				ORGANIZATIONNAME = Livetex;
+				TargetAttributes = {
+					6125A1142474716B00A92C0D = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 6125A1102474716B00A92C0D /* Build configuration list for PBXProject "LivetexMessaging" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6125A10C2474716B00A92C0D;
+			packageReferences = (
+				84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */,
+			);
+			productRefGroup = 6125A1162474716B00A92C0D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6125A1142474716B00A92C0D /* LivetexMessaging */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6125A1132474716B00A92C0D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6125A1252474716E00A92C0D /* LaunchScreen.storyboard in Resources */,
+				6125A1222474716E00A92C0D /* Assets.xcassets in Resources */,
+				6125A1202474716B00A92C0D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B07C3AFE8C69F051FAE1B3C7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LivetexMessaging-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B599BB4949194246BF93101C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6125A1112474716B00A92C0D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				618B623724B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift in Sources */,
+				61F0308C24A3E4F1006FF160 /* DebouncedFunction.swift in Sources */,
+				61FE189424D0886500BF90F6 /* ActionsReusableView.swift in Sources */,
+				6125A15F2474760B00A92C0D /* ChatViewModel.swift in Sources */,
+				6167343E248D6FEE00A6930F /* CustomTextMessageSizeCalculator.swift in Sources */,
+				61673439248D48D800A6930F /* CustomMessagesCollectionViewLayoutAttributes.swift in Sources */,
+				6167343C248D63B200A6930F /* UIEdgeInsets+Factory.swift in Sources */,
+				FF30F31E27306D8D006EE916 /* UIResponder+First.swift in Sources */,
+				618B621C24ABCEB500CD46BB /* EstimationView.swift in Sources */,
+				618B623924B3882A00CD46BB /* FollowTextMessageCollectionViewCell.swift in Sources */,
+				618B621E24ABD03300CD46BB /* Assets.swift in Sources */,
+				618B623B24B3C35700CD46BB /* MessageInputBarView.swift in Sources */,
+				618B622B24AE705D00CD46BB /* Data+Hex.swift in Sources */,
+				610600BD24A94DA000D056F8 /* Settings.swift in Sources */,
+				6125A1352474735500A92C0D /* OperatorAvatarView.swift in Sources */,
+				6167342E248BA64400A6930F /* UIColor+Hex.swift in Sources */,
+				FF0312F5281C4B24001144AD /* ConnectionView.swift in Sources */,
+				61673430248BA66000A6930F /* UIColor+Factory.swift in Sources */,
+				6125A1192474716B00A92C0D /* AppDelegate.swift in Sources */,
+				6125A1502474748E00A92C0D /* DateFormatter+Factory.swift in Sources */,
+				6105876D249692EF00B9CBDF /* SystemMessageSizeCalculator.swift in Sources */,
+				61673437248D32DA00A6930F /* CustomMessagesFlowLayout.swift in Sources */,
+				6105876B24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift in Sources */,
+				6125A15E2474760B00A92C0D /* ChatViewModel+Messages.swift in Sources */,
+				618B622124ABD26000CD46BB /* UIImage+Asset.swift in Sources */,
+				6167342B248B960600A6930F /* UIAlertController+Factory.swift in Sources */,
+				6125A1392474739400A92C0D /* ChatViewController.swift in Sources */,
+				6125A1362474735500A92C0D /* DialogueStateView.swift in Sources */,
+				618B623324B2350100CD46BB /* FollowMessageView.swift in Sources */,
+				FF031402281D9E8A001144AD /* String+Size.swift in Sources */,
+				61673434248D1D3A00A6930F /* TextMessageCollectionViewCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6125A11E2474716B00A92C0D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6125A11F2474716B00A92C0D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6125A1232474716E00A92C0D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6125A1242474716E00A92C0D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6125A1272474716E00A92C0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6125A1282474716E00A92C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6125A12A2474716E00A92C0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D93B122FDADFB26DE38B9D86 /* Pods-LivetexMessaging.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LivetexMessaging/LivetexMessaging.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = FJE97HEJ7P;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/LivetexMessaging/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.livetex.mobile.messaging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		6125A12B2474716E00A92C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AACDEDDF06D6BA089F2E005 /* Pods-LivetexMessaging.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LivetexMessaging/LivetexMessaging.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = FJE97HEJ7P;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/LivetexMessaging/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.livetex.mobile.messaging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6125A1102474716B00A92C0D /* Build configuration list for PBXProject "LivetexMessaging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6125A1272474716E00A92C0D /* Debug */,
+				6125A1282474716E00A92C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6125A1292474716E00A92C0D /* Build configuration list for PBXNativeTarget "LivetexMessaging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6125A12A2474716E00A92C0D /* Debug */,
+				6125A12B2474716E00A92C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LiveTex/sdk-ios";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		84E71EDF294C25E90022995B /* LivetexCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */;
+			productName = LivetexCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 6125A10D2474716B00A92C0D /* Project object */;
+}
