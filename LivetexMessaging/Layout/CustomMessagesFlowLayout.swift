@@ -14,6 +14,7 @@ class CustomMessagesFlowLayout: MessagesCollectionViewFlowLayout {
     private lazy var followTextMessageSizeCalculator = FollowTextMessageSizeCalculator(layout: self)
     private lazy var customTextMessageSizeCalculator = CustomTextMessageSizeCalculator(layout: self)
     private lazy var systemMessageSizeCalculator = SystemMessageSizeCalculator(layout: self)
+    private lazy var attachmentFileSizeCalculator = AttachmentFileSizeCalculator(layout: self)
 
     override class var layoutAttributesClass: AnyClass {
         return CustomMessagesCollectionViewLayoutAttributes.self
@@ -50,6 +51,9 @@ class CustomMessagesFlowLayout: MessagesCollectionViewFlowLayout {
         case .text, .emoji:
             return customTextMessageSizeCalculator
         case let .custom(value):
+            if value is ChatViewModel.AttachmentFile {
+                return attachmentFileSizeCalculator
+            }
             guard let type = value as? CustomType else {
                 return super.cellSizeCalculatorForItem(at: indexPath)
             }

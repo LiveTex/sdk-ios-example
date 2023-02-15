@@ -36,9 +36,9 @@ class CustomTextMessageSizeCalculator: TextMessageSizeCalculator {
         return labelSize(for: timeAttributedText, considering: .greatestFiniteMagnitude)
     }
 
-    override func messageContainerMaxWidth(for message: MessageType) -> CGFloat {
+    override func messageContainerMaxWidth(for message: MessageType, at indexPath: IndexPath) -> CGFloat {
         let dataSource = messagesLayout.messagesDataSource
-        let maxWidth = super.messageContainerMaxWidth(for: message)
+        let maxWidth = super.messageContainerMaxWidth(for: message, at: indexPath)
         let timeLabelInset = timeLabelInsets(for: message)
         if dataSource.isFromCurrentSender(message: message) {
             let statusWidth = statusImageInsets.horizontal + statusImageSize.width
@@ -48,10 +48,10 @@ class CustomTextMessageSizeCalculator: TextMessageSizeCalculator {
         }
     }
 
-    override func messageContainerSize(for message: MessageType) -> CGSize {
+    override func messageContainerSize(for message: MessageType, at indexPath: IndexPath) -> CGSize {
         let timeLabelInset = timeLabelInsets(for: message)
         let timeSize = timeLabelSize(for: message)
-        let maxWidth = messageContainerMaxWidth(for: message)
+        let maxWidth = messageContainerMaxWidth(for: message, at: indexPath)
 
         var size: CGSize
         let attributedText: NSAttributedString

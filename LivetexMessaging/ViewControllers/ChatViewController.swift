@@ -119,7 +119,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     }
 
     private func setConnectingState() {
-        dialogueStateView.setConnectionInProgress()
+        dialogueStateView.setConnectionInProgress(withKind: .connect)
     }
 
     private func setConnectedState() {
@@ -259,6 +259,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         messagesCollectionView.register(TextMessageCollectionViewCell.self)
         messagesCollectionView.register(SystemMessageCollectionViewCell.self)
         messagesCollectionView.register(FollowTextMessageCollectionViewCell.self)
+        messagesCollectionView.register(AttachmentCollectionViewCell.self)
         messagesCollectionView.register(ActionsReusableView.self,
                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
         messagesCollectionView.delegate = self
@@ -378,6 +379,12 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             return cell
 
         case let .custom(value):
+            if value is ChatViewModel.AttachmentFile {
+                let cell = messagesCollectionView.dequeueReusableCell(AttachmentCollectionViewCell.self, for: indexPath)
+                cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                return cell
+            }
+            
             guard let type = value as? CustomType else {
                 return super.collectionView(collectionView, cellForItemAt: indexPath)
             }
@@ -439,7 +446,7 @@ private extension ChatViewController {
 
 extension ChatViewController: MessagesDataSource {
 
-    func currentSender() -> SenderType {
+    var currentSender: SenderType {
         return viewModel.user
     }
 
@@ -541,6 +548,40 @@ extension ChatViewController: MessageCellDelegate {
         present(viewController, animated: true)
     }
 
+    func didTapMessage(in cell: MessageCollectionViewCell) {
+        guard let indexPath = messagesCollectionView.indexPath(for: cell) else { return }
+        guard let messagesDataSource = messagesCollectionView.messagesDataSource else { return }
+        let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+        switch message.kind {
+        case .custom(let data):
+            guard let attachment = data as? ChatViewModel.AttachmentFile, let url = attachment.url
+            else { return }
+            dialogueStateView.setConnectionInProgress(withKind: .download)
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, error == nil else { return }
+                let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(response?.suggestedFilename ?? url.lastPathComponent)
+                do {
+                    try data.write(to: tmpURL)
+                    DispatchQueue.main.async { [weak self] in
+                        let avc = UIActivityViewController(activityItems: [tmpURL], applicationActivities: nil)
+                        avc.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
+                            do {
+                                self?.dialogueStateView.setConnectedSuccessfully()
+                                try FileManager.default.removeItem(at: tmpURL)
+                            } catch {
+                                print(error)
+                            }
+                        }
+                        self?.present(avc, animated: true)
+                    }
+                    } catch {
+                        print(error)
+                    }
+            }.resume()
+        default:
+            return
+        }
+    }
 }
 
 extension ChatViewController: MessagesDisplayDelegate {

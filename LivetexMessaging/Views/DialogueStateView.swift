@@ -76,7 +76,7 @@ final class DialogueStateView: UIView {
         addSubview(connectionView)
 
         connectionView.setTitle(Appearance.connectionViewText)
-        setConnectionInProgress()
+        setConnectionInProgress(withKind: .connect)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -107,9 +107,9 @@ final class DialogueStateView: UIView {
 
 extension DialogueStateView {
 
-    func setConnectionInProgress() {
+    func setConnectionInProgress(withKind kind: LoadingKind) {
         connectionView.isHidden = false
-        connectionView.startActivityIndicator()
+        connectionView.startActivityIndicator(withKind: kind)
     }
 
     func setConnectedSuccessfully() {

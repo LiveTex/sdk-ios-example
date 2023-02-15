@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum LoadingKind: String {
+    case connect = "connecting"
+    case download = "downloading"
+}
+
 final class ConnectionView: UIView {
 
     private struct Appearance {
@@ -72,7 +77,8 @@ final class ConnectionView: UIView {
 
 extension ConnectionView {
 
-    func startActivityIndicator() {
+    func startActivityIndicator(withKind kind: LoadingKind) {
+        setTitle(kind.rawValue)
         activityIndicator.startAnimating()
         activityIndicator.isHidden = false
     }

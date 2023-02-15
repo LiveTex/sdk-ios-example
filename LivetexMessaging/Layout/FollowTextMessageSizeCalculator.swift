@@ -13,8 +13,8 @@ class FollowTextMessageSizeCalculator: CustomTextMessageSizeCalculator {
 
     private let followMessageViewSize = CGSize(width: 0, height: 20)
 
-    override func messageContainerSize(for message: MessageType) -> CGSize {
-        let size = super.messageContainerSize(for: message)
+    override func messageContainerSize(for message: MessageType, at indexPath: IndexPath) -> CGSize {
+        let size = super.messageContainerSize(for: message, at: indexPath)
         return CGSize(width: size.width, height: size.height + followMessageViewSize.height)
     }
 

@@ -184,8 +184,7 @@ class ChatViewModel {
                                                                       displayName: $0.creator.employee?.name ?? "")
             switch $0.content {
             case let .text(text):
-                let extensions: Set<String> = ["png", "jpg", "jpeg", "gif"]
-                if extensions.contains((text as NSString).pathExtension) {
+                if text.isImageUrl {
                     kind = .photo(File(url: text))
                 } else if text.first == ">" {
                     let texts = text.trimmingCharacters(in: CharacterSet(charactersIn: "> ")).split(separator: "\n")
@@ -194,7 +193,11 @@ class ChatViewModel {
                     kind = $0.creator.type == .system ? .custom(CustomType.system(text)) : .text(text)
                 }
             case let .file(attachment):
-                kind = .photo(File(url: attachment.url))
+                if attachment.url.isImageUrl {
+                    kind = .photo(File(url: attachment.url))
+                } else {
+                    kind = .custom(AttachmentFile(url: attachment.url, name: attachment.name))
+                }
             @unknown default:
                 kind = .text("")
             }

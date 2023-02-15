@@ -22,4 +22,5 @@ enum Asset: String {
     case buttonDefault = "button_default"
     case shadowBackground = "shadow_background"
     case defaultBackground = "default_background"
+    case fileAttachment = "file_attachment"
 }

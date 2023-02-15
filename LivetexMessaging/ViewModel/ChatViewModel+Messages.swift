@@ -63,5 +63,18 @@ extension ChatViewModel {
             self.size = size
         }
     }
+    
+    struct AttachmentFile {
+        var url: URL?
+
+        var name: String?
+        
+        // MARK: - Initialization
+
+        init(url: String, name: String) {
+            self.url = URL(string: url, relativeTo: URL(string: "https://"))
+            self.name = name
+        }
+    }
 
 }

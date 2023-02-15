@@ -39,7 +39,12 @@
 		618B623B24B3C35700CD46BB /* MessageInputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B623A24B3C35700CD46BB /* MessageInputBarView.swift */; };
 		61F0308C24A3E4F1006FF160 /* DebouncedFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F0308B24A3E4F1006FF160 /* DebouncedFunction.swift */; };
 		61FE189424D0886500BF90F6 /* ActionsReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FE189324D0886500BF90F6 /* ActionsReusableView.swift */; };
+		848D3B402992B743008C2838 /* AttachmentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848D3B3F2992B743008C2838 /* AttachmentCollectionViewCell.swift */; };
+		84D1B9132995EC4900B86C45 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 84D1B9122995EC4900B86C45 /* MessageKit */; };
+		84D1B9152995F0BF00B86C45 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D1B9142995F0BF00B86C45 /* Dimensions.swift */; };
 		84E71EE0294C25E90022995B /* LivetexCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84E71EDF294C25E90022995B /* LivetexCore */; };
+		84F798F9299458240096B271 /* AttachmentFileSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F798F8299458240096B271 /* AttachmentFileSizeCalculator.swift */; };
+		84F798FB29948FB80096B271 /* String+Url.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F798FA29948FB80096B271 /* String+Url.swift */; };
 		FF0312F5281C4B24001144AD /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0312F4281C4B24001144AD /* ConnectionView.swift */; };
 		FF031402281D9E8A001144AD /* String+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF031401281D9E8A001144AD /* String+Size.swift */; };
 		FF30F31E27306D8D006EE916 /* UIResponder+First.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF30F31D27306D8D006EE916 /* UIResponder+First.swift */; };
@@ -95,6 +100,10 @@
 		61F0308B24A3E4F1006FF160 /* DebouncedFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedFunction.swift; sourceTree = "<group>"; };
 		61FE189324D0886500BF90F6 /* ActionsReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsReusableView.swift; sourceTree = "<group>"; };
 		6C5EF1AC062AF49B3219BFDC /* Pods_LivetexMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LivetexMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		848D3B3F2992B743008C2838 /* AttachmentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewCell.swift; sourceTree = "<group>"; };
+		84D1B9142995F0BF00B86C45 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
+		84F798F8299458240096B271 /* AttachmentFileSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFileSizeCalculator.swift; sourceTree = "<group>"; };
+		84F798FA29948FB80096B271 /* String+Url.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Url.swift"; sourceTree = "<group>"; };
 		D93B122FDADFB26DE38B9D86 /* Pods-LivetexMessaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivetexMessaging.debug.xcconfig"; path = "Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging.debug.xcconfig"; sourceTree = "<group>"; };
 		FF0312F4281C4B24001144AD /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
 		FF031401281D9E8A001144AD /* String+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Size.swift"; sourceTree = "<group>"; };
@@ -106,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84D1B9132995EC4900B86C45 /* MessageKit in Frameworks */,
 				156A44ADDAA1BF38B1BE28D4 /* Pods_LivetexMessaging.framework in Frameworks */,
 				84E71EE0294C25E90022995B /* LivetexCore in Frameworks */,
 			);
@@ -165,6 +175,7 @@
 				6125A1262474716E00A92C0D /* Info.plist */,
 				6125A1232474716E00A92C0D /* LaunchScreen.storyboard */,
 				6125A11E2474716B00A92C0D /* Main.storyboard */,
+				84D1B9142995F0BF00B86C45 /* Dimensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -257,6 +268,7 @@
 				6167343D248D6FEE00A6930F /* CustomTextMessageSizeCalculator.swift */,
 				618B623624B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift */,
 				6105876C249692EF00B9CBDF /* SystemMessageSizeCalculator.swift */,
+				84F798F8299458240096B271 /* AttachmentFileSizeCalculator.swift */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -306,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				FF031401281D9E8A001144AD /* String+Size.swift */,
+				84F798FA29948FB80096B271 /* String+Url.swift */,
 			);
 			path = String;
 			sourceTree = "<group>";
@@ -314,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				6105876A24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift */,
+				848D3B3F2992B743008C2838 /* AttachmentCollectionViewCell.swift */,
 				FF2CB28D2714AB3300287117 /* FollowMessageCell */,
 			);
 			path = "Custom Cells";
@@ -357,6 +371,7 @@
 			name = LivetexMessaging;
 			packageProductDependencies = (
 				84E71EDF294C25E90022995B /* LivetexCore */,
+				84D1B9122995EC4900B86C45 /* MessageKit */,
 			);
 			productName = LivetexMessaging;
 			productReference = 6125A1152474716B00A92C0D /* LivetexMessaging.app */;
@@ -388,6 +403,7 @@
 			mainGroup = 6125A10C2474716B00A92C0D;
 			packageReferences = (
 				84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */,
+				84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			productRefGroup = 6125A1162474716B00A92C0D /* Products */;
 			projectDirPath = "";
@@ -459,6 +475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				618B623724B3860B00CD46BB /* FollowTextMessageSizeCalculator.swift in Sources */,
+				848D3B402992B743008C2838 /* AttachmentCollectionViewCell.swift in Sources */,
 				61F0308C24A3E4F1006FF160 /* DebouncedFunction.swift in Sources */,
 				61FE189424D0886500BF90F6 /* ActionsReusableView.swift in Sources */,
 				6125A15F2474760B00A92C0D /* ChatViewModel.swift in Sources */,
@@ -483,11 +500,14 @@
 				6105876B24967D7500B9CBDF /* SystemMessageCollectionViewCell.swift in Sources */,
 				6125A15E2474760B00A92C0D /* ChatViewModel+Messages.swift in Sources */,
 				618B622124ABD26000CD46BB /* UIImage+Asset.swift in Sources */,
+				84D1B9152995F0BF00B86C45 /* Dimensions.swift in Sources */,
 				6167342B248B960600A6930F /* UIAlertController+Factory.swift in Sources */,
 				6125A1392474739400A92C0D /* ChatViewController.swift in Sources */,
 				6125A1362474735500A92C0D /* DialogueStateView.swift in Sources */,
 				618B623324B2350100CD46BB /* FollowMessageView.swift in Sources */,
+				84F798FB29948FB80096B271 /* String+Url.swift in Sources */,
 				FF031402281D9E8A001144AD /* String+Size.swift in Sources */,
+				84F798F9299458240096B271 /* AttachmentFileSizeCalculator.swift in Sources */,
 				61673434248D1D3A00A6930F /* TextMessageCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -710,6 +730,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MessageKit/MessageKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/LiveTex/sdk-ios";
@@ -721,6 +749,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		84D1B9122995EC4900B86C45 /* MessageKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */;
+			productName = MessageKit;
+		};
 		84E71EDF294C25E90022995B /* LivetexCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */;
