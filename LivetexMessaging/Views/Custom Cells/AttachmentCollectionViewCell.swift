@@ -35,8 +35,9 @@ internal class AttachmentCollectionViewCell: MessageContentCell {
         super.apply(layoutAttributes)
         if let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes {
             messageLabel.textInsets = attributes.messageLabelInsets
-            /*messageLabel.messageLabelFont*/fontToStore = attributes.messageLabelFont
-            fileIconView.frame = CGRect(x: Dimension.space16, y: Dimension.chatMessageTopTextInset, width: Dimension.fileAttachmentIconWidth, height: Dimension.fileAttachmentIconHeight)
+            fontToStore = attributes.messageLabelFont
+            let fileIconViewYcoord = Int(messageContainerView.bounds.size.height) / 2 - Dimension.fileAttachmentIconHeight / 2
+            fileIconView.frame = CGRect(x: Dimension.space16, y: fileIconViewYcoord, width: Dimension.fileAttachmentIconWidth, height: Dimension.fileAttachmentIconHeight)
             let frameSize = CGSize(width: messageContainerView.bounds.size.width - CGFloat(Dimension.fileAttachmentIconTotalWidth), height: messageContainerView.bounds.size.height)
             messageLabel.frame = CGRect(origin: CGPoint(x: Dimension.fileAttachmentIconTotalWidth, y: 0), size: frameSize)
         }

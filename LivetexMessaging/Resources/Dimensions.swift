@@ -9,7 +9,6 @@
 import Foundation
 
 class Dimension {
-    static let chatMessageTopTextInset: Int = 7
     static let chatMessageBottomTextInset: Int = 7
     static let space4: Int = 4
     static let space16: Int = 16
