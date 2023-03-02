@@ -37,9 +37,6 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     // onDialogStateReceived dependent
     private var shouldShowInput: Bool? = true
 
-    override var inputAccessoryView: UIView? {
-        return messageInputBarView
-    }
 
     override var canResignFirstResponder: Bool {
         true
@@ -116,6 +113,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         messageInputBarView.onAttachmentButtonTapped = { [weak self] in
             self?.sendAttachment()
         }
+        self.inputBarType = .custom(messageInputBarView)
     }
 
     private func setConnectingState() {
