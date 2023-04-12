@@ -57,7 +57,7 @@ extension ChatViewModel {
              image: UIImage? = nil,
              placeholderImage: UIImage = UIImage(),
              size: CGSize = CGSize(width: 240, height: 240)) {
-            self.url = URL(string: url, relativeTo: URL(string: "https://"))
+            self.url = URL(string: url.encodeUrl, relativeTo: URL(string: "https://"))
             self.image = image
             self.placeholderImage = placeholderImage
             self.size = size
@@ -72,7 +72,7 @@ extension ChatViewModel {
         // MARK: - Initialization
 
         init(url: String, name: String) {
-            self.url = URL(string: url, relativeTo: URL(string: "https://"))
+            self.url = URL(string: url.encodeUrl, relativeTo: URL(string: "https://"))
             self.name = name
         }
     }
