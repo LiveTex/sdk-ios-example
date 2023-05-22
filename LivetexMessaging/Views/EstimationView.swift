@@ -11,6 +11,9 @@ import UIKit
 class EstimationView: UIView {
 
     var onEstimateAction: ((Action) -> Void)?
+    var onNextScreenButton: (() -> Void)?
+    
+    private let nextScreenButton = UIButton()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -47,6 +50,7 @@ class EstimationView: UIView {
         return view
     }()
 
+
     // MARK: - Initialization
 
     override init(frame: CGRect) {
@@ -57,7 +61,6 @@ class EstimationView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-
         configure()
     }
 
@@ -69,12 +72,21 @@ class EstimationView: UIView {
         addSubview(voteUpButton)
         addSubview(voteDownButton)
         addSubview(separator)
+        addSubview(nextScreenButton)
+        addAction()
     }
 
     // MARK: - Action
 
     @objc private func onButtonTapped(_ sender: UIButton) {
         onEstimateAction?(Action(rawValue: sender.tag) ?? .up)
+    }
+    func addAction() {
+        nextScreenButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
+    }
+
+    @objc private func tapButton() {
+        onNextScreenButton?()
     }
 
     // MARK: - Layout
@@ -102,12 +114,21 @@ class EstimationView: UIView {
                                  y: bounds.maxY,
                                  width: bounds.width,
                                  height: 0.5)
-    }
+        nextScreenButton.translatesAutoresizingMaskIntoConstraints = false
+        nextScreenButton.setTitle("Next Screen", for: .normal)
+        nextScreenButton.backgroundColor = .black
+        nextScreenButton.layer.cornerRadius = 8
+        NSLayoutConstraint.activate([
+            nextScreenButton.heightAnchor.constraint(equalToConstant: 54),
+            nextScreenButton.widthAnchor.constraint(equalToConstant: 130),
+            nextScreenButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            nextScreenButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -6),
+        nextScreenButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5)])
+            }
 
     static var viewHeight: CGFloat {
-        return 40
+        return 110
     }
-
 }
 
 extension EstimationView {
@@ -116,7 +137,6 @@ extension EstimationView {
         case up
         case down
     }
-
 }
 
 extension EstimationView {
@@ -127,5 +147,4 @@ extension EstimationView {
         static let voteDownInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         static let imageSize = CGSize(width: 30, height: 30)
     }
-
 }

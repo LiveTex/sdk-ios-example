@@ -42,9 +42,9 @@
 		848D3B402992B743008C2838 /* AttachmentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848D3B3F2992B743008C2838 /* AttachmentCollectionViewCell.swift */; };
 		84D1B9132995EC4900B86C45 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 84D1B9122995EC4900B86C45 /* MessageKit */; };
 		84D1B9152995F0BF00B86C45 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D1B9142995F0BF00B86C45 /* Dimensions.swift */; };
-		84E71EE0294C25E90022995B /* LivetexCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84E71EDF294C25E90022995B /* LivetexCore */; };
 		84F798F9299458240096B271 /* AttachmentFileSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F798F8299458240096B271 /* AttachmentFileSizeCalculator.swift */; };
 		84F798FB29948FB80096B271 /* String+Url.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F798FA29948FB80096B271 /* String+Url.swift */; };
+		C4EC5BAF2A1B0D5000B2DF70 /* VisitorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC5BAE2A1B0D5000B2DF70 /* VisitorViewController.swift */; };
 		FF0312F5281C4B24001144AD /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0312F4281C4B24001144AD /* ConnectionView.swift */; };
 		FF031402281D9E8A001144AD /* String+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF031401281D9E8A001144AD /* String+Size.swift */; };
 		FF30F31E27306D8D006EE916 /* UIResponder+First.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF30F31D27306D8D006EE916 /* UIResponder+First.swift */; };
@@ -104,6 +104,7 @@
 		84D1B9142995F0BF00B86C45 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
 		84F798F8299458240096B271 /* AttachmentFileSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFileSizeCalculator.swift; sourceTree = "<group>"; };
 		84F798FA29948FB80096B271 /* String+Url.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Url.swift"; sourceTree = "<group>"; };
+		C4EC5BAE2A1B0D5000B2DF70 /* VisitorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorViewController.swift; sourceTree = "<group>"; };
 		D93B122FDADFB26DE38B9D86 /* Pods-LivetexMessaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivetexMessaging.debug.xcconfig"; path = "Target Support Files/Pods-LivetexMessaging/Pods-LivetexMessaging.debug.xcconfig"; sourceTree = "<group>"; };
 		FF0312F4281C4B24001144AD /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
 		FF031401281D9E8A001144AD /* String+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Size.swift"; sourceTree = "<group>"; };
@@ -117,7 +118,6 @@
 			files = (
 				84D1B9132995EC4900B86C45 /* MessageKit in Frameworks */,
 				156A44ADDAA1BF38B1BE28D4 /* Pods_LivetexMessaging.framework in Frameworks */,
-				84E71EE0294C25E90022995B /* LivetexCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				6125A1382474739400A92C0D /* ChatViewController.swift */,
+				C4EC5BAE2A1B0D5000B2DF70 /* VisitorViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -370,7 +371,6 @@
 			);
 			name = LivetexMessaging;
 			packageProductDependencies = (
-				84E71EDF294C25E90022995B /* LivetexCore */,
 				84D1B9122995EC4900B86C45 /* MessageKit */,
 			);
 			productName = LivetexMessaging;
@@ -402,7 +402,6 @@
 			);
 			mainGroup = 6125A10C2474716B00A92C0D;
 			packageReferences = (
-				84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */,
 				84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			productRefGroup = 6125A1162474716B00A92C0D /* Products */;
@@ -491,6 +490,7 @@
 				610600BD24A94DA000D056F8 /* Settings.swift in Sources */,
 				6125A1352474735500A92C0D /* OperatorAvatarView.swift in Sources */,
 				6167342E248BA64400A6930F /* UIColor+Hex.swift in Sources */,
+				C4EC5BAF2A1B0D5000B2DF70 /* VisitorViewController.swift in Sources */,
 				FF0312F5281C4B24001144AD /* ConnectionView.swift in Sources */,
 				61673430248BA66000A6930F /* UIColor+Factory.swift in Sources */,
 				6125A1192474716B00A92C0D /* AppDelegate.swift in Sources */,
@@ -738,14 +738,6 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/LiveTex/sdk-ios";
-			requirement = {
-				branch = develop;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -753,11 +745,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
-		};
-		84E71EDF294C25E90022995B /* LivetexCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 84E71EDE294C25E90022995B /* XCRemoteSwiftPackageReference "sdk-ios" */;
-			productName = LivetexCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -86,7 +86,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     private func layoutEstimationView() {
         let offset = viewModel.isEmployeeEstimated ? EstimationView.viewHeight : 0
         estimationView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
-                                      y: view.safeAreaLayoutGuide.layoutFrame.minY - offset,
+                                      y: 25, //view.safeAreaLayoutGuide.layoutFrame.minY - offset,
                                       width: view.safeAreaLayoutGuide.layoutFrame.width,
                                       height: EstimationView.viewHeight)
 
@@ -290,6 +290,12 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         
         scrollsToLastItemOnKeyboardBeginsEditing = true
         maintainPositionOnKeyboardFrameChanged = true
+
+        estimationView.onNextScreenButton = { [weak self] in
+            let vc = VisitorViewController()
+            vc.deviceToken = self?.viewModel.deviceToken
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     // MARK: - Send attachment
