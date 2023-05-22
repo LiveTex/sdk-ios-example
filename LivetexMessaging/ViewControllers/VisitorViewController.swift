@@ -62,7 +62,7 @@ class VisitorViewController: UIViewController {
         view.addSubview(outputLabel)
         outputLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            outputLabel.heightAnchor.constraint(equalToConstant: 200),
+            outputLabel.heightAnchor.constraint(equalToConstant: 290),
             outputLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             outputLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             outputLabel.topAnchor.constraint(equalTo: sendCustomToken.bottomAnchor, constant: 50)])
@@ -94,12 +94,16 @@ class VisitorViewController: UIViewController {
         var customToken: Token = .custom(inputTextField.text ?? "TestCustomToken")
         let loginService = LivetexAuthService(token: customToken, deviceToken: deviceToken)
         let customTokenText = inputTextField.text ?? "TestCustomToken"
+        guard let visiterToken = UserDefaults.standard.string(forKey: "com.livetex.visitorToken") else { return }
         loginService.requestAuthorization { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case let .success(token):
                     self?.outputLabel.text =
+                    "Посылаемые токены: " + "\n" +
                     "customToken: " +  customTokenText + "\n" +
+                    "visiterToken: " + visiterToken + "\n" + "\n" +
+                    "Ответ от сервера:" + "\n" +
                     "visitorToken:  " + token.visitorToken + "\n" +
                     "upload:  " + token.endpoints.upload + "\n" +
                     "ws:  " + token.endpoints.ws
