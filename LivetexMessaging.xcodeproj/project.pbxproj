@@ -44,6 +44,7 @@
 		84D1B9152995F0BF00B86C45 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D1B9142995F0BF00B86C45 /* Dimensions.swift */; };
 		84F798F9299458240096B271 /* AttachmentFileSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F798F8299458240096B271 /* AttachmentFileSizeCalculator.swift */; };
 		84F798FB29948FB80096B271 /* String+Url.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F798FA29948FB80096B271 /* String+Url.swift */; };
+		C4741A192A1ED3640078B1BD /* LivetexCore in Frameworks */ = {isa = PBXBuildFile; productRef = C4741A182A1ED3640078B1BD /* LivetexCore */; };
 		C4EC5BAF2A1B0D5000B2DF70 /* VisitorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC5BAE2A1B0D5000B2DF70 /* VisitorViewController.swift */; };
 		FF0312F5281C4B24001144AD /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0312F4281C4B24001144AD /* ConnectionView.swift */; };
 		FF031402281D9E8A001144AD /* String+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF031401281D9E8A001144AD /* String+Size.swift */; };
@@ -117,6 +118,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84D1B9132995EC4900B86C45 /* MessageKit in Frameworks */,
+				C4741A192A1ED3640078B1BD /* LivetexCore in Frameworks */,
 				156A44ADDAA1BF38B1BE28D4 /* Pods_LivetexMessaging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,6 +374,7 @@
 			name = LivetexMessaging;
 			packageProductDependencies = (
 				84D1B9122995EC4900B86C45 /* MessageKit */,
+				C4741A182A1ED3640078B1BD /* LivetexCore */,
 			);
 			productName = LivetexMessaging;
 			productReference = 6125A1152474716B00A92C0D /* LivetexMessaging.app */;
@@ -403,6 +406,7 @@
 			mainGroup = 6125A10C2474716B00A92C0D;
 			packageReferences = (
 				84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */,
+				C4741A172A1ED3640078B1BD /* XCRemoteSwiftPackageReference "sdk-ios" */,
 			);
 			productRefGroup = 6125A1162474716B00A92C0D /* Products */;
 			projectDirPath = "";
@@ -656,7 +660,7 @@
 				CODE_SIGN_ENTITLEMENTS = LivetexMessaging/LivetexMessaging.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = FJE97HEJ7P;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,7 +689,7 @@
 				CODE_SIGN_ENTITLEMENTS = LivetexMessaging/LivetexMessaging.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = FJE97HEJ7P;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -738,6 +742,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		C4741A172A1ED3640078B1BD /* XCRemoteSwiftPackageReference "sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LiveTex/sdk-ios";
+			requirement = {
+				branch = "feature/DEV-137-Use-two-token";
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -745,6 +757,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 84D1B9112995EC4900B86C45 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
+		};
+		C4741A182A1ED3640078B1BD /* LivetexCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4741A172A1ED3640078B1BD /* XCRemoteSwiftPackageReference "sdk-ios" */;
+			productName = LivetexCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

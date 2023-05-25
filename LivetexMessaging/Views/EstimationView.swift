@@ -115,12 +115,14 @@ class EstimationView: UIView {
                                  width: bounds.width,
                                  height: 0.5)
         nextScreenButton.translatesAutoresizingMaskIntoConstraints = false
-        nextScreenButton.setTitle("Next Screen", for: .normal)
+        nextScreenButton.setTitle("Тестирование авторизации", for: .normal)
+        nextScreenButton.titleLabel?.font = UIFont.systemFont(ofSize: 12.0)
+
         nextScreenButton.backgroundColor = .black
         nextScreenButton.layer.cornerRadius = 8
         NSLayoutConstraint.activate([
             nextScreenButton.heightAnchor.constraint(equalToConstant: 54),
-            nextScreenButton.widthAnchor.constraint(equalToConstant: 130),
+            nextScreenButton.widthAnchor.constraint(equalToConstant: 180),
             nextScreenButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             nextScreenButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -6),
         nextScreenButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5)])

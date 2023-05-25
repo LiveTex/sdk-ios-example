@@ -62,7 +62,7 @@ class ChatViewModel {
     // MARK: - Configuration
 
     private func requestAuthentication(deviceToken: String) {
-        let loginService = LivetexAuthService(token: settings.visitorToken.map { .system($0) },
+        let loginService = LivetexAuthService(visitorToken: settings.visitorToken,
                                               deviceToken: deviceToken)
         self.deviceToken = deviceToken
         loginService.requestAuthorization { [weak self] result in
