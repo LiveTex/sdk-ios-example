@@ -14,4 +14,6 @@ extension UIColor {
 
     static let messageGray: UIColor = UIColor(hex: 0xf5f5f5)
 
+    static let buttonToken: UIColor = UIColor(hex: 0x074784)
+
 }

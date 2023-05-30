@@ -11,9 +11,6 @@ import UIKit
 class EstimationView: UIView {
 
     var onEstimateAction: ((Action) -> Void)?
-    var onNextScreenButton: (() -> Void)?
-    
-    private let nextScreenButton = UIButton()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -72,21 +69,12 @@ class EstimationView: UIView {
         addSubview(voteUpButton)
         addSubview(voteDownButton)
         addSubview(separator)
-        addSubview(nextScreenButton)
-        addAction()
     }
 
     // MARK: - Action
 
     @objc private func onButtonTapped(_ sender: UIButton) {
         onEstimateAction?(Action(rawValue: sender.tag) ?? .up)
-    }
-    func addAction() {
-        nextScreenButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
-    }
-
-    @objc private func tapButton() {
-        onNextScreenButton?()
     }
 
     // MARK: - Layout
@@ -114,22 +102,10 @@ class EstimationView: UIView {
                                  y: bounds.maxY,
                                  width: bounds.width,
                                  height: 0.5)
-        nextScreenButton.translatesAutoresizingMaskIntoConstraints = false
-        nextScreenButton.setTitle("Тестирование авторизации", for: .normal)
-        nextScreenButton.titleLabel?.font = UIFont.systemFont(ofSize: 12.0)
-
-        nextScreenButton.backgroundColor = .black
-        nextScreenButton.layer.cornerRadius = 8
-        NSLayoutConstraint.activate([
-            nextScreenButton.heightAnchor.constraint(equalToConstant: 54),
-            nextScreenButton.widthAnchor.constraint(equalToConstant: 180),
-            nextScreenButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            nextScreenButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -6),
-        nextScreenButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5)])
             }
 
     static var viewHeight: CGFloat {
-        return 110
+        return 50
     }
 }
 
