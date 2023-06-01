@@ -77,13 +77,12 @@ class ChatViewModel {
         }
     }
 
-    private func startSession(token: SessionToken) {
+    func startSession(token: SessionToken) {
         settings.visitorToken = token.visitorToken
         sessionService = LivetexSessionService(token: token)
         sessionService?.onEvent = { [weak self] event in
             self?.didReceive(event: event)
         }
-
         sessionService?.onConnect = { [weak self] in
             self?.onWebsocketStateChanged?(true)
         }

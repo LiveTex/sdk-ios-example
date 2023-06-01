@@ -90,7 +90,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                                       width: view.safeAreaLayoutGuide.layoutFrame.width,
                                       height: EstimationView.viewHeight)
 
-        messagesCollectionView.contentInset.top = viewModel.isEmployeeEstimated ? 0 : EstimationView.viewHeight
+        messagesCollectionView.contentInset.top = viewModel.isEmployeeEstimated ? 50 : EstimationView.viewHeight
         messagesCollectionView.scrollIndicatorInsets.top = viewModel.isEmployeeEstimated ? 0 : EstimationView.viewHeight
     }
 
@@ -107,7 +107,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         navigationItem.titleView = dialogueStateView
 
         let next = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(openTokenView))
-        next.title = "Далее"
+        next.title = "Настройки"
         navigationItem.rightBarButtonItems = [next]
         navigationController?.navigationBar.isHidden = false
     }
@@ -186,7 +186,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                     self.viewModel.messages.append(contentsOf: newMessages)
                     self.messagesCollectionView.insertSections(indexSet)
                 }, completion: { _ in
-                    self.messagesCollectionView.scrollToLastItem(animated: true)
+                    self.messagesCollectionView.scrollToLastItem(at: .top, animated: true)
                 })
             }
             
@@ -298,7 +298,18 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     }
 
     @objc func openTokenView() {
-        let vc = VisitorViewController()
+        createAutorisation { [weak self] sessionInfo in
+            self?.viewModel.messages = []
+            self?.messagesCollectionView.reloadData()
+            self?.viewModel.sessionService?.webSocketClose(1, reason: "", wasClean: true)
+            self?.viewModel.startSession(token: sessionInfo)
+        }
+    }
+
+    func createAutorisation(completionHandler: @escaping ((SessionToken) -> Void)) {
+        let viewModel = VisitorViewModel(completionHandler: completionHandler)
+        let vc = VisitorViewController(viewModel: viewModel)
+        vc.viewModel = viewModel
         vc.deviceToken = self.viewModel.deviceToken
         self.navigationController?.pushViewController(vc, animated: true)
     }

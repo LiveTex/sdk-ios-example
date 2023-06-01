@@ -9,26 +9,40 @@
 import UIKit
 import LivetexCore
 
-class VisitorViewController: UIViewController {
-
-    let currentTokenLabel = UILabel()
-    let customVisitorTokenLabel = UILabel()
-    let customVisitorTokenTextField = UITextField()
-
-    let sendCurrentVisitorTokenButton = UIButton()
-    let sendEmptyTokenButton = UIButton()
-    let sendCustomTokenButton = UIButton()
-    let sendTwoTokenButton = UIButton()
-
-    let currentAccessKeyLabel = UILabel()
-    let changeAccessKeyLabel = UILabel()
-    let changeAccessKeyTextField = UITextField()
+final class VisitorViewController: UIViewController {
 
 
-    private let settings = Settings()
+    //MARK: - Public Properties
+
+    var viewModel: VisitorViewModel!
     var deviceToken: String? =  nil
-    private var keychainItem: CFDictionary? = nil
-    private var ref: AnyObject?
+
+    //MARK: -  Private Properties
+    
+    private let currentTokenLabel = UILabel()
+    private let customVisitorTokenLabel = UILabel()
+    private let customVisitorTokenTextField = UITextField()
+    
+    private let sendCurrentVisitorTokenButton = UIButton()
+    private let sendEmptyTokenButton = UIButton()
+    private let sendCustomTokenButton = UIButton()
+    private let sendTwoTokenButton = UIButton()
+    
+    private let currentAccessKeyLabel = UILabel()
+    private let changeAccessKeyLabel = UILabel()
+    private let changeAccessKeyTextField = UITextField()
+    private let settings = Settings()
+
+    
+    
+    //MARK: - Initional
+    
+    convenience init(viewModel: VisitorViewModel) {
+        self.init()
+        self.viewModel = viewModel
+    }
+    
+    //MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,25 +50,31 @@ class VisitorViewController: UIViewController {
         setUI()
         addAction()
         setData()
+        
+        self.viewModel.action = {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.navigationController?.navigationBar.isHidden = true
     }
-
-    func setUI() {
+    
+    //MARK: - Private methods
+    
+    private func setUI() {
         view.addSubview(currentTokenLabel)
-        currentTokenLabel.numberOfLines = 2
+        currentTokenLabel.numberOfLines = 3
         currentTokenLabel.text = "Текущий токен (visitorToken):"
         currentTokenLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             currentTokenLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 90),
             currentTokenLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             currentTokenLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-
+            
         ])
-
+        
         view.addSubview(customVisitorTokenLabel)
         customVisitorTokenLabel.translatesAutoresizingMaskIntoConstraints = false
         customVisitorTokenLabel.textAlignment = .left
@@ -65,8 +85,8 @@ class VisitorViewController: UIViewController {
             customVisitorTokenLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             customVisitorTokenLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
-
-
+        
+        
         view.addSubview(customVisitorTokenTextField)
         customVisitorTokenTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -75,13 +95,13 @@ class VisitorViewController: UIViewController {
             customVisitorTokenTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             customVisitorTokenTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
-
+        
         customVisitorTokenTextField.placeholder = " customVisitorToken"
         customVisitorTokenTextField.layer.borderWidth = 1
         customVisitorTokenTextField.layer.borderColor = UIColor.gray.cgColor
         customVisitorTokenTextField.layer.cornerRadius = 8
         customVisitorTokenTextField.backgroundColor = .systemGray6
-
+        
         view.addSubview(sendEmptyTokenButton)
         sendEmptyTokenButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -94,8 +114,8 @@ class VisitorViewController: UIViewController {
         sendEmptyTokenButton.backgroundColor = UIColor.buttonToken
         sendEmptyTokenButton.layer.cornerRadius = 8
         sendEmptyTokenButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
-
-
+        
+        
         view.addSubview(sendCurrentVisitorTokenButton)
         sendCurrentVisitorTokenButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -110,7 +130,7 @@ class VisitorViewController: UIViewController {
         sendCurrentVisitorTokenButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
         sendCurrentVisitorTokenButton.titleLabel?.numberOfLines = 2
         sendCurrentVisitorTokenButton.titleLabel?.textAlignment = .center
-
+        
         view.addSubview(sendCustomTokenButton)
         sendCustomTokenButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -119,15 +139,15 @@ class VisitorViewController: UIViewController {
             sendCustomTokenButton.heightAnchor.constraint(equalToConstant: 54),
             sendCustomTokenButton.topAnchor.constraint(equalTo: sendCurrentVisitorTokenButton.bottomAnchor, constant: 10),
         ])
-
+        
         sendCustomTokenButton.setTitle("Авторизоваться только с указанным \n customVisitorToken", for: .normal)
         sendCustomTokenButton.backgroundColor = UIColor.buttonToken
         sendCustomTokenButton.layer.cornerRadius = 8
         sendCustomTokenButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
         sendCustomTokenButton.titleLabel?.numberOfLines = 2
         sendCustomTokenButton.titleLabel?.textAlignment = .center
-
-
+        
+        
         view.addSubview(sendTwoTokenButton)
         sendTwoTokenButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -142,7 +162,7 @@ class VisitorViewController: UIViewController {
         sendTwoTokenButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
         sendTwoTokenButton.titleLabel?.numberOfLines = 2
         sendTwoTokenButton.titleLabel?.textAlignment = .center
-
+        
         view.addSubview(currentAccessKeyLabel)
         currentAccessKeyLabel.translatesAutoresizingMaskIntoConstraints = false
         currentAccessKeyLabel.numberOfLines = 3
@@ -152,114 +172,54 @@ class VisitorViewController: UIViewController {
             currentAccessKeyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             currentAccessKeyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
-
+        
         let tapOutside: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tapOutside)
     }
-
-    func addAction() {
+    
+    private func addAction() {
         sendTwoTokenButton.addTarget(self, action: #selector(sendTwoTokens), for: .touchUpInside)
         sendEmptyTokenButton.addTarget(self, action: #selector(sendEmptyTokens ), for: .touchUpInside)
         sendCurrentVisitorTokenButton.addTarget(self, action: #selector(sendVisitorToken), for: .touchUpInside)
         sendCustomTokenButton.addTarget(self, action: #selector(sendCustomToken), for: .touchUpInside)
-
     }
-
-    @objc func sendTwoTokens() {
+    
+    @objc private  func sendTwoTokens() {
+        let customTokenText = customVisitorTokenTextField.text ?? "TestCustomToken"
         guard let deviceToken = deviceToken else { return }
-        self.requestAuthenticationTwoTokens(deviceToken: deviceToken )
+        self.viewModel.requestAuthenticationTwoTokens(deviceToken: deviceToken, customToken: customTokenText)
+        
     }
-
-    @objc func sendEmptyTokens() {
+    
+    @objc private func sendEmptyTokens() {
         guard let deviceToken = deviceToken else { return }
-        self.requestAuthenticationEmptyTokens(deviceToken: deviceToken)
+        self.viewModel.requestAuthenticationEmptyTokens(deviceToken: deviceToken)
+        
     }
-
-    @objc func sendVisitorToken() {
+    
+    @objc private func sendVisitorToken() {
         guard let deviceToken = deviceToken else { return }
-        self.requestAuthenticationVisitorToken(deviceToken: deviceToken )
+        self.viewModel.requestAuthenticationVisitorToken(deviceToken: deviceToken )
     }
-
-    @objc func sendCustomToken() {
+    
+    @objc private func sendCustomToken() {
+        let customTokenText = customVisitorTokenTextField.text ?? "TestCustomToken"
         guard let deviceToken = deviceToken else { return }
-        self.requestAuthenticationCustomToken(deviceToken: deviceToken)
+        self.viewModel.requestAuthenticationCustomToken(deviceToken: deviceToken, customToken: customTokenText)
     }
-
-
-    @objc func dismissKeyboard() {
+    
+    
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    func setData() {
+    
+    private func setData() {
         guard let visitorToken = UserDefaults.standard.string(forKey: "com.livetex.visitorToken"),
-        let textVisitorToken = currentTokenLabel.text,
-        let livetexInfo = Bundle.main.infoDictionary?["Livetex"] as? [String: String],
-        let accessKey = livetexInfo["LivetexAppID"],
-        let textCurrentKey = currentAccessKeyLabel.text else { return }
+              let textVisitorToken = currentTokenLabel.text,
+              let livetexInfo = Bundle.main.infoDictionary?["Livetex"] as? [String: String],
+              let accessKey = livetexInfo["LivetexAppID"],
+              let textCurrentKey = currentAccessKeyLabel.text else { return }
         currentTokenLabel.text = textVisitorToken + "\n" + visitorToken
         currentAccessKeyLabel.text = textCurrentKey + "\n" + accessKey
-        print(accessKey)
-    }
-
-    private func requestAuthenticationTwoTokens(deviceToken: String) {
-        let customTokenText = customVisitorTokenTextField.text ?? "TestCustomToken"
-        guard let visitorToken = UserDefaults.standard.string(forKey: "com.livetex.visitorToken") else { return }
-        let loginService = LivetexAuthService(visitorToken: visitorToken, customVisitorToken: customTokenText, deviceToken: deviceToken)
-
-        loginService.requestAuthorization { result in
-            DispatchQueue.main.async {
-                switch result {
-                case let .success(token):
-                    break
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
-    }
-
-    private func requestAuthenticationEmptyTokens(deviceToken: String) {
-        let loginService = LivetexAuthService(deviceToken: deviceToken)
-        loginService.requestAuthorization { result in
-            DispatchQueue.main.async {
-                switch result {
-                case let .success(token):
-                   break
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
-    }
-
-    private func requestAuthenticationVisitorToken(deviceToken: String) {
-        guard let visitorToken = UserDefaults.standard.string(forKey: "com.livetex.visitorToken") else { return }
-        let loginService = LivetexAuthService(visitorToken: visitorToken, deviceToken: deviceToken)
-
-        loginService.requestAuthorization { result in
-            DispatchQueue.main.async {
-                switch result {
-                case let .success(token):
-                    break
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
-    }
-
-    private func requestAuthenticationCustomToken(deviceToken: String) {
-        let customToken = customVisitorTokenTextField.text ?? "TestCustomToken"
-        let loginService = LivetexAuthService(customVisitorToken: customToken, deviceToken: deviceToken)
-
-        loginService.requestAuthorization { result in
-            DispatchQueue.main.async {
-                switch result {
-                case let .success(token):
-                    break
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
     }
 }
