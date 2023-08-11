@@ -86,7 +86,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     private func layoutEstimationView() {
         let offset = viewModel.isEmployeeEstimated ? EstimationView.viewHeight : 0
         estimationView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
-                                      y: 60, //view.safeAreaLayoutGuide.layoutFrame.minY - offset,
+                                      y: view.safeAreaLayoutGuide.layoutFrame.minY,
                                       width: view.safeAreaLayoutGuide.layoutFrame.width,
                                       height: EstimationView.viewHeight)
 
@@ -322,8 +322,9 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         imagePickerController.delegate = self
         let cancel = UIAlertAction(title: "Отменить", style: .cancel)
 
-        let library = UIAlertAction(title: "Фото", style: .default) { _ in
-            imagePickerController.sourceType = .photoLibrary
+        let library = UIAlertAction(title: "Фото и Видео", style: .default) { _ in
+            imagePickerController.sourceType = .savedPhotosAlbum//.photoLibrary
+            imagePickerController.mediaTypes = [UTType.image.identifier, UTType.movie.identifier]
             self.present(imagePickerController, animated: true)
         }
         library.setValue(UIImage(asset: .photo), forKey: "image")
@@ -335,9 +336,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         camera.setValue(UIImage(asset: .camera), forKey: "image")
 
         let documents = UIAlertAction(title: "Документ", style: .default) { _ in
-            let allowedContentTypes: [UTType] = [.pdf,
-                                                 .jpeg,
-                                                 .png]
+            let allowedContentTypes: [UTType] = [UTType.item]
             let documentPickerController = UIDocumentPickerViewController(forOpeningContentTypes: allowedContentTypes)
             documentPickerController.delegate = self
             documentPickerController.allowsMultipleSelection = false
@@ -704,42 +703,70 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image = info[.originalImage] as? UIImage,
-              let data = image.jpegData(compressionQuality: 0.5) else {
-                  picker.dismiss(animated: true)
-                  return
-              }
+        if let image = info[.originalImage] as? UIImage,
+           let data = image.jpegData(compressionQuality: 0.5),
+           let url = info[.imageURL] as? URL {
+            viewModel.sessionService?.upload(data: data, fileName: url.lastPathComponent, mimeType: "image/jpeg") { [weak self] result in
+                switch result {
+                case let .success(attachment):
+                    self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
+        } else if let videoURL = info[.mediaURL] as? URL{
+            do { let videoData = try Data(contentsOf: videoURL)
 
-        viewModel.sessionService?.upload(data: data, fileName: "image.png", mimeType: "image/jpeg") { [weak self] result in
-            switch result {
-            case let .success(attachment):
-                self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
-            case let .failure(error):
-                print(error.localizedDescription)
+                viewModel.sessionService?.upload(data: videoData, fileName: videoURL.lastPathComponent, mimeType: "video/mp4") { [weak self] result in
+                    switch result {
+                    case let .success(attachment):
+                        self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
+                    case let .failure(error):
+                        print(error.localizedDescription)
+                    }
+                }
+            }  catch {
+                debugPrint("Couldn't get Data from URL")
+            }
+        } else if let originImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage,
+                  (info[UIImagePickerController.InfoKey.imageURL] as? URL) == nil {
+
+            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            let fileName = UUID().uuidString + ".jpeg"
+            let fileURL = documentsDirectory.appendingPathComponent(fileName)
+            guard let jpegData = originImage.jpegData(compressionQuality: 0.5) else { return }
+            do {
+                try jpegData.write(to: fileURL)
+            } catch let error {
+                print("error saving file with error", error)
+            }
+            viewModel.sessionService?.upload(data: jpegData, fileName: fileName, mimeType: "image/jpeg") { [weak self] result in
+                switch result {
+                case let .success(attachment):
+                    self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
             }
         }
-
         picker.dismiss(animated: true)
     }
-
 }
 
 extension ChatViewController: UIDocumentPickerDelegate {
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first,
-              let documentData = try? Data(contentsOf: url) else {
-                  return
-              }
+        guard let url = urls.first else { return }
+        url.startAccessingSecurityScopedResource()
+        guard let documentData = try? Data(contentsOf: url) else { return }
+        url.stopAccessingSecurityScopedResource()
 
-        let documentURL = urls[0]
+        let documentURL = url //urls[0]
         let documentExtension = documentURL.pathExtension
-
         // TODO: - Add methods upload and sendEvent to viewModel
-
         switch documentExtension {
         case "pdf":
-            viewModel.sessionService?.upload(data: documentData, fileName: "document.pdf", mimeType: "application/pdf") { [weak self] result in
+            viewModel.sessionService?.upload(data: documentData, fileName: documentURL.lastPathComponent, mimeType: "application/pdf") { [weak self] result in
                 switch result {
                 case let .success(attachment):
                     self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
@@ -748,8 +775,8 @@ extension ChatViewController: UIDocumentPickerDelegate {
                 }
             }
 
-        case "png", "jpeg":
-            viewModel.sessionService?.upload(data: documentData, fileName: "image.png", mimeType: "image/jpeg") { [weak self] result in
+        default:
+            viewModel.sessionService?.upload(data: documentData, fileName: documentURL.lastPathComponent, mimeType: documentURL.pathExtension) { [weak self] result in
                 switch result {
                 case let .success(attachment):
                     self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
@@ -757,8 +784,6 @@ extension ChatViewController: UIDocumentPickerDelegate {
                     print(error.localizedDescription)
                 }
             }
-        default:
-            print("Sending of \(documentExtension) documents is not implemented yet.")
         }
     }
 
