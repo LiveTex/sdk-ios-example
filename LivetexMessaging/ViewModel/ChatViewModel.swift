@@ -10,6 +10,7 @@ import UIKit
 import MessageKit
 import LivetexCore
 
+
 class ChatViewModel {
 
     var onDepartmentReceived: (([Department]) -> Void)?
@@ -20,7 +21,7 @@ class ChatViewModel {
     var onAttributesReceived: (() -> Void)?
     var onTypingReceived: (() -> Void)?
     var onWebsocketStateChanged: ((Bool) -> Void)?
-
+    var deviceToken: String?
     var followMessage: String?
     var messages: [ChatMessage] = []
 
@@ -61,9 +62,9 @@ class ChatViewModel {
     // MARK: - Configuration
 
     private func requestAuthentication(deviceToken: String) {
-        let loginService = LivetexAuthService(token: settings.visitorToken.map { .system($0) },
+        let loginService = LivetexAuthService(visitorToken: settings.visitorToken,
                                               deviceToken: deviceToken)
-
+        self.deviceToken = deviceToken
         loginService.requestAuthorization { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -76,13 +77,12 @@ class ChatViewModel {
         }
     }
 
-    private func startSession(token: SessionToken) {
+    func startSession(token: SessionToken) {
         settings.visitorToken = token.visitorToken
         sessionService = LivetexSessionService(token: token)
         sessionService?.onEvent = { [weak self] event in
             self?.didReceive(event: event)
         }
-
         sessionService?.onConnect = { [weak self] in
             self?.onWebsocketStateChanged?(true)
         }

@@ -47,6 +47,7 @@ class EstimationView: UIView {
         return view
     }()
 
+
     // MARK: - Initialization
 
     override init(frame: CGRect) {
@@ -57,7 +58,6 @@ class EstimationView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-
         configure()
     }
 
@@ -102,12 +102,11 @@ class EstimationView: UIView {
                                  y: bounds.maxY,
                                  width: bounds.width,
                                  height: 0.5)
-    }
+            }
 
     static var viewHeight: CGFloat {
-        return 40
+        return 50
     }
-
 }
 
 extension EstimationView {
@@ -116,7 +115,6 @@ extension EstimationView {
         case up
         case down
     }
-
 }
 
 extension EstimationView {
@@ -127,5 +125,4 @@ extension EstimationView {
         static let voteDownInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         static let imageSize = CGSize(width: 30, height: 30)
     }
-
 }

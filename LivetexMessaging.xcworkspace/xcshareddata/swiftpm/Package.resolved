@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/LiveTex/sdk-ios",
       "state" : {
-        "branch" : "develop",
-        "revision" : "bf24caae70debe15f059421c6ef113e15b1374c1"
+        "branch" : "feature/DEV-137-Use-two-token",
+        "revision" : "1ba5715baa7b816b1ef3719b33f8e042595a213a"
       }
     }
   ],
