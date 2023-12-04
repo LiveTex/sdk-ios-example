@@ -30,9 +30,8 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     private lazy var viewModel = ChatViewModel()
     
     private lazy var typingFunction = DebouncedFunction(timeInterval: Constants.debouncedFunctionTimeInterval) { [weak self] in
-        self?.setTypingIndicatorViewHidden(true, animated: true)
+            self?.setTypingIndicatorViewHidden(true, animated: true)
     }
-
     // Local variable showing input state
     // onDialogStateReceived dependent
     private var shouldShowInput: Bool? = true
@@ -122,6 +121,9 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     }
 
     private func setConnectingState() {
+        if let token = viewModel.sessionToken {
+            viewModel.sessionService?.connect()
+        }
         dialogueStateView.setConnectionInProgress(withKind: .connect)
     }
 
@@ -180,30 +182,28 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             }
 
             let updates = {
-                self.messagesCollectionView.performBatchUpdates({
-                    let count = self.viewModel.messages.count
-                    let indexSet = IndexSet(integersIn: count..<count + newMessages.count)
-                    self.viewModel.messages.append(contentsOf: newMessages)
-                    self.messagesCollectionView.insertSections(indexSet)
-                }, completion: { _ in
-                    self.messagesCollectionView.scrollToLastItem(at: .top, animated: true)
-                })
+                    self.messagesCollectionView.performBatchUpdates({
+                        let count = self.viewModel.messages.count
+                        let indexSet = IndexSet(integersIn: count..<count + newMessages.count)
+                        self.viewModel.messages.append(contentsOf: newMessages)
+                        self.messagesCollectionView.insertSections(indexSet)
+                    }, completion: { _ in
+                        self.messagesCollectionView.scrollToLastItem(at: .top, animated: true)
+                    })
             }
-            
             if self.viewModel.messages.isEmpty {
                 updates()
             } else {
                 if self.isTypingIndicatorHidden {
                     updates()
                 } else {
-                    self.setTypingIndicatorViewHidden(true,
-                                                      animated: true,
-                                                      whilePerforming: updates,
-                                                      completion: nil)
+                        self.setTypingIndicatorViewHidden(true,
+                                                          animated: true,
+                                                          whilePerforming: updates,
+                                                          completion: nil)
                 }
             }
         }
-        
         viewModel.onDialogStateReceived = { [weak self] dialog in
             self?.dialogueStateView.title = dialog.employee?.name
             self?.dialogueStateView.subtitle = dialog.employeeStatus?.rawValue
@@ -216,13 +216,14 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             }
         }
 
+
         viewModel.onTypingReceived = { [weak self] in
             self?.typingFunction.call()
+            
             self?.setTypingIndicatorViewHidden(false, animated: true, completion: { _ in
                 self?.messagesCollectionView.scrollToLastItem(animated: true)
             })
         }
-
         viewModel.onAttributesReceived = { [weak self] in
             let alertController = UIAlertController(title: "Атрибуты",
                                                     message: "Необходимо указать обязательные атрибуты",
@@ -294,11 +295,11 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         layout?.setMessageIncomingAvatarSize(CGSize(width: 30, height: 30))
         
         scrollsToLastItemOnKeyboardBeginsEditing = true
-        maintainPositionOnKeyboardFrameChanged = true
+        maintainPositionOnInputBarHeightChanged = true
     }
 
     @objc func openTokenView() {
-        createAutorisation { [weak self] sessionInfo in
+        createAuthorization { [weak self] sessionInfo in
             self?.viewModel.messages = []
             self?.messagesCollectionView.reloadData()
             self?.viewModel.sessionService?.webSocketClose(1, reason: "", wasClean: true)
@@ -306,7 +307,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         }
     }
 
-    func createAutorisation(completionHandler: @escaping ((SessionToken) -> Void)) {
+    func createAuthorization(completionHandler: @escaping ((SessionToken) -> Void)) {
         let viewModel = VisitorViewModel(completionHandler: completionHandler)
         let vc = VisitorViewController(viewModel: viewModel)
         vc.viewModel = viewModel
@@ -651,7 +652,7 @@ extension ChatViewController: MessagesDisplayDelegate {
         }
 
         imageView.kf.indicatorType = .activity
-        imageView.kf.setImage(with: .network(ImageResource(downloadURL: imageURL)))
+        imageView.kf.setImage(with: .network(Kingfisher.ImageResource(downloadURL: imageURL)))
     }
 
     func configureAvatarView(_ avatarView: AvatarView,
@@ -667,7 +668,7 @@ extension ChatViewController: MessagesDisplayDelegate {
                   return
               }
 
-        avatarView.kf.setImage(with: ImageResource(downloadURL: resourceURL), placeholder: placeholderImage)
+        avatarView.kf.setImage(with: Kingfisher.ImageResource(downloadURL: resourceURL), placeholder: placeholderImage)
     }
 
 }
@@ -706,7 +707,12 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
         if let image = info[.originalImage] as? UIImage,
            let data = image.jpegData(compressionQuality: 0.5),
            let url = info[.imageURL] as? URL {
-            viewModel.sessionService?.upload(data: data, fileName: url.lastPathComponent, mimeType: "image/jpeg") { [weak self] result in
+
+            let documentURL = url //urls[0]
+            let documentExtension = documentURL.pathExtension
+            let name = documentURL.deletingPathExtension().lastPathComponent.description.transliterateRussianToLatin()
+
+            viewModel.sessionService?.upload(data: data, fileName: name + "." + documentExtension.lowercased(), mimeType: "image/jpeg") { [weak self] result in
                 switch result {
                 case let .success(attachment):
                     self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
@@ -716,13 +722,17 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             }
         } else if let videoURL = info[.mediaURL] as? URL{
             do { let videoData = try Data(contentsOf: videoURL)
-
-                viewModel.sessionService?.upload(data: videoData, fileName: videoURL.lastPathComponent, mimeType: "video/mp4") { [weak self] result in
-                    switch result {
-                    case let .success(attachment):
-                        self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
-                    case let .failure(error):
-                        print(error.localizedDescription)
+                let documentURL = videoURL //urls[0]
+                let documentExtension = documentURL.pathExtension
+                let name = documentURL.deletingPathExtension().lastPathComponent.description.transliterateRussianToLatin()
+                if let typeFile = UTType(filenameExtension: documentURL.pathExtension)?.preferredMIMEType {
+                    viewModel.sessionService?.upload(data: videoData, fileName: name + "." + documentExtension.lowercased(), mimeType: typeFile) { [weak self] result in
+                        switch result {
+                        case let .success(attachment):
+                            self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
+                        case let .failure(error):
+                            print(error.localizedDescription)
+                        }
                     }
                 }
             }  catch {
@@ -757,16 +767,19 @@ extension ChatViewController: UIDocumentPickerDelegate {
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let url = urls.first else { return }
+
         url.startAccessingSecurityScopedResource()
         guard let documentData = try? Data(contentsOf: url) else { return }
         url.stopAccessingSecurityScopedResource()
 
         let documentURL = url //urls[0]
         let documentExtension = documentURL.pathExtension
+        let name = documentURL.deletingPathExtension().lastPathComponent.description.transliterateRussianToLatin()
+
         // TODO: - Add methods upload and sendEvent to viewModel
         switch documentExtension {
         case "pdf":
-            viewModel.sessionService?.upload(data: documentData, fileName: documentURL.lastPathComponent, mimeType: "application/pdf") { [weak self] result in
+            viewModel.sessionService?.upload(data: documentData, fileName: name + "." + documentExtension.lowercased(), mimeType: "application/pdf") { [weak self] result in
                 switch result {
                 case let .success(attachment):
                     self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
@@ -774,17 +787,17 @@ extension ChatViewController: UIDocumentPickerDelegate {
                     print(error.localizedDescription)
                 }
             }
-
         default:
-            viewModel.sessionService?.upload(data: documentData, fileName: documentURL.lastPathComponent, mimeType: documentURL.pathExtension) { [weak self] result in
-                switch result {
-                case let .success(attachment):
-                    self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
-                case let .failure(error):
-                    print(error.localizedDescription)
+            if let typeFile = UTType(filenameExtension: documentURL.pathExtension)?.preferredMIMEType {
+                viewModel.sessionService?.upload(data: documentData, fileName: name + "." + documentExtension.lowercased(), mimeType: typeFile) { [weak self] result in
+                    switch result {
+                    case let .success(attachment):
+                        self?.viewModel.sendEvent(ClientEvent(.file(attachment)))
+                    case let .failure(error):
+                        print(error.localizedDescription)
+                    }
                 }
             }
         }
     }
-
 }
