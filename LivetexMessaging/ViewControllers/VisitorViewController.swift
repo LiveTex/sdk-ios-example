@@ -89,14 +89,17 @@ final class VisitorViewController: UIViewController {
         
         view.addSubview(customVisitorTokenTextField)
         customVisitorTokenTextField.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
             customVisitorTokenTextField.heightAnchor.constraint(equalToConstant: 40),
             customVisitorTokenTextField.topAnchor.constraint(equalTo: customVisitorTokenLabel.bottomAnchor, constant: 10),
             customVisitorTokenTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             customVisitorTokenTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
-        
-        customVisitorTokenTextField.placeholder = " customVisitorToken"
+        customVisitorTokenTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
+        customVisitorTokenTextField.leftViewMode = .always
+        customVisitorTokenTextField.placeholder = "customVisitorToken"
+        customVisitorTokenTextField.textAlignment = .left
         customVisitorTokenTextField.layer.borderWidth = 1
         customVisitorTokenTextField.layer.borderColor = UIColor.gray.cgColor
         customVisitorTokenTextField.layer.cornerRadius = 8
@@ -185,6 +188,7 @@ final class VisitorViewController: UIViewController {
     }
     
     @objc private  func sendTwoTokens() {
+        sendTwoTokenButton.buttonTapped()
         let customTokenText = customVisitorTokenTextField.text ?? "TestCustomToken"
         guard let deviceToken = deviceToken else { return }
         self.viewModel.requestAuthenticationTwoTokens(deviceToken: deviceToken, customToken: customTokenText)
@@ -192,17 +196,20 @@ final class VisitorViewController: UIViewController {
     }
     
     @objc private func sendEmptyTokens() {
+        sendEmptyTokenButton.buttonTapped()
         guard let deviceToken = deviceToken else { return }
         self.viewModel.requestAuthenticationEmptyTokens(deviceToken: deviceToken)
         
     }
     
     @objc private func sendVisitorToken() {
+        sendCurrentVisitorTokenButton.buttonTapped()
         guard let deviceToken = deviceToken else { return }
         self.viewModel.requestAuthenticationVisitorToken(deviceToken: deviceToken )
     }
     
     @objc private func sendCustomToken() {
+        sendCustomTokenButton.buttonTapped()
         let customTokenText = customVisitorTokenTextField.text ?? "TestCustomToken"
         guard let deviceToken = deviceToken else { return }
         self.viewModel.requestAuthenticationCustomToken(deviceToken: deviceToken, customToken: customTokenText)
@@ -212,7 +219,7 @@ final class VisitorViewController: UIViewController {
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    
+
     private func setData() {
         guard let visitorToken = UserDefaults.standard.string(forKey: "com.livetex.visitorToken"),
               let textVisitorToken = currentTokenLabel.text,

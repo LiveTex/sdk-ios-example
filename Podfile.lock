@@ -1,7 +1,7 @@
 PODS:
   - BFRImageViewer (1.2.9):
     - PINRemoteImage (~> 3.0.0)
-  - Kingfisher (6.3.1)
+  - Kingfisher (7.9.1)
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -20,7 +20,7 @@ PODS:
 
 DEPENDENCIES:
   - BFRImageViewer (~> 1.2.9)
-  - Kingfisher (~> 6.3.1)
+  - Kingfisher (~> 7.0)
   - PINRemoteImage (~> 3.0.3)
 
 SPEC REPOS:
@@ -33,11 +33,11 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   BFRImageViewer: 57f7ba6055956d383b49577a78643fa442e70aa4
-  Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
+  Kingfisher: 1d14e9f59cbe19389f591c929000332bf70efd32
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
 
-PODFILE CHECKSUM: 7a34d89fe33c8bd9e1f99e044a06a3dbb4ee5b8c
+PODFILE CHECKSUM: f81f24d13826d46bfdb87646df197b99b99ee9fe
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.13.0

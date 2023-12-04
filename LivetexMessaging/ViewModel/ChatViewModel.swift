@@ -24,6 +24,7 @@ class ChatViewModel {
     var deviceToken: String?
     var followMessage: String?
     var messages: [ChatMessage] = []
+    var sessionToken: SessionToken?
 
     var user = Recipient(senderId: UUID().uuidString, displayName: "")
 
@@ -69,6 +70,7 @@ class ChatViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case let .success(token):
+                    self?.sessionToken = token
                     self?.startSession(token: token)
                 case let .failure(error):
                     print(error.localizedDescription)
@@ -216,22 +218,24 @@ class ChatViewModel {
             isCanLoadMore = false
             return
         }
-
         DispatchQueue.global(qos: .userInitiated).async {
+            
             self.isLoadingMore = false
+            //   var newMessages = self.convertMessages(items)
             var newMessages = Array(Set(self.convertMessages(items)).subtracting(self.messages))
-            let currentDate = self.messages.first?.sentDate ?? Date()
-            let receivedDate = newMessages.last?.sentDate ?? Date()
-            newMessages.sort(by: { $0.sentDate < $1.sentDate })
-            DispatchQueue.main.async {
-                if !self.messages.isEmpty, receivedDate.compare(currentDate) == .orderedAscending {
-                    self.onLoadMoreMessages?(newMessages)
-                } else {
-                    self.onMessagesReceived?(newMessages)
-                    self.isContentLoaded = true
+            if newMessages.count != self.messages.count || self.messages.count == 1 {
+                let currentDate = self.messages.first?.sentDate ?? Date()
+                let receivedDate = newMessages.last?.sentDate ?? Date()
+                newMessages.sort(by: { $0.sentDate < $1.sentDate })
+                DispatchQueue.main.async {
+                    if !self.messages.isEmpty, receivedDate.compare(currentDate) == .orderedAscending {
+                        self.onLoadMoreMessages?(newMessages)
+                    } else {
+                        self.onMessagesReceived?(newMessages)
+                        self.isContentLoaded = true
+                    }
                 }
             }
         }
     }
-
 }
