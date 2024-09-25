@@ -1,6 +1,15 @@
 {
-  "originHash" : "31f65194aa647911f2c75f6e5a1350dbdbfaa36b7891d0134fbd39d509426e08",
+  "originHash" : "6d8a4251d3b26ab3a0de041388e99c8d1554022dc0e8f5c5c4f7dd656f3e116d",
   "pins" : [
+    {
+      "identity" : "bfrimageviewer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/stingray06/BFRImageViewer",
+      "state" : {
+        "revision" : "452cf72471ec1afb343eb0f31e6817dc4b0f9e90",
+        "version" : "1.2.11"
+      }
+    },
     {
       "identity" : "inputbaraccessoryview",
       "kind" : "remoteSourceControl",
@@ -11,12 +20,75 @@
       }
     },
     {
+      "identity" : "keychain-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/evgenyneu/keychain-swift",
+      "state" : {
+        "revision" : "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+        "version" : "19.0.0"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
+        "version" : "7.12.0"
+      }
+    },
+    {
       "identity" : "messagekit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MessageKit/MessageKit",
       "state" : {
         "revision" : "1993e8e90d4e9a61b8d9bc8ceb733964ce943376",
         "version" : "4.2.0"
+      }
+    },
+    {
+      "identity" : "pincache",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinterest/PINCache.git",
+      "state" : {
+        "revision" : "2fb85948463292c2e824148cf17dc62a4c217a94",
+        "version" : "3.0.4"
+      }
+    },
+    {
+      "identity" : "pinoperation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinterest/PINOperation.git",
+      "state" : {
+        "revision" : "a74f978733bdaf982758bfa23d70a189f4b4c1b6",
+        "version" : "1.2.3"
+      }
+    },
+    {
+      "identity" : "pinremoteimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinterest/PINRemoteImage",
+      "state" : {
+        "revision" : "37022d0fb9359ce33fa06028d03382c8b9957c62",
+        "version" : "3.0.4"
+      }
+    },
+    {
+      "identity" : "sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LiveTex/sdk-ios",
+      "state" : {
+        "branch" : "master",
+        "revision" : "7f65af91fb97e2557bbb9ff1b6fe92a62dcff80f"
+      }
+    },
+    {
+      "identity" : "sdk-ui-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LiveTex/sdk-ui-ios",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8d7cd6c3f84eb3e14d10797c9b94a3e1e832ba57"
       }
     }
   ],
