@@ -10,34 +10,40 @@ import UIKit
 
 class EstimationView: UIView {
 
-    var onEstimateAction: ((Action) -> Void)?
+    var rating: String?
+    var onEstimateAction: (() -> Void)?
 
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .black
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = UIColor.grayFont
+        label.layer.opacity = 0.88
         label.text = "Оцените качество обслуживания"
         return label
     }()
 
     private lazy var voteUpButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(asset: .voteUp), for: .normal)
+        let button = UIButton(type: .custom)
+        if rating == nil {
+            button.setImage(UIImage(asset: .voteUpGray), for: .normal)
+        } else {
+            button.setImage(UIImage(asset: .voteUpGreen), for: .normal)
+        }
+        button.addTarget(self, action: #selector(onButtonTapped), for: .touchUpInside)
         button.setTitle(nil, for: .normal)
-        button.tintColor = .green
-        button.tag = Action.up.rawValue
-        button.addTarget(self, action: #selector(onButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
 
     private lazy var voteDownButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(asset: .voteDown), for: .normal)
+        let button = UIButton(type: .custom)
+        if rating == nil {
+            button.setImage(UIImage(asset: .voteDownGray), for: .normal)
+        } else {
+            button.setImage(UIImage(asset: .voteDownRed), for: .normal)
+        }
+        button.addTarget(self, action: #selector(onButtonTapped), for: .touchUpInside)
         button.setTitle(nil, for: .normal)
-        button.tag = Action.down.rawValue
-        button.tintColor = .red
-        button.addTarget(self, action: #selector(onButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
 
@@ -64,39 +70,68 @@ class EstimationView: UIView {
     // MARK: - Configuration
 
     private func configure() {
-        backgroundColor = UIColor.groupTableViewBackground
+        backgroundColor = UIColor.grayBackground
         addSubview(titleLabel)
         addSubview(voteUpButton)
         addSubview(voteDownButton)
         addSubview(separator)
     }
+    
+    func voteConfig(_ rating: String?) {
+        
+        if let rating = rating {
+            
+            if rating == "1" {
+                //  voteUpButton.isEnabled = true
+                voteUpButton.setImage(UIImage(asset: .voteUpGreen), for: .normal)
+                voteDownButton.setImage(UIImage(asset: .voteDownGray), for: .normal)
+                //  voteDownButton.isEnabled = true
+            } else {
+                voteDownButton.setImage(UIImage(asset: .voteDownRed), for: .normal)
+                voteUpButton.setImage(UIImage(asset: .voteUpGray), for: .normal)
+            }
+        } else {
+            voteDownButton.setImage(UIImage(asset: .voteDownGray), for: .normal)
+            voteUpButton.setImage(UIImage(asset: .voteUpGray), for: .normal)
+        }
+        // self.setNeedsDisplay()
+    }
+    
 
     // MARK: - Action
 
-    @objc private func onButtonTapped(_ sender: UIButton) {
-        onEstimateAction?(Action(rawValue: sender.tag) ?? .up)
-    }
+
 
     // MARK: - Layout
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        voteDownButton.frame = CGRect(x: bounds.maxX - Layout.voteDownInsets.right - voteUpButton.intrinsicContentSize.width,
-                                      y: (bounds.height - voteDownButton.intrinsicContentSize.height) / 2,
-                                      width: voteDownButton.intrinsicContentSize.width,
-                                      height: voteDownButton.intrinsicContentSize.height)
+        self.addSubview(titleLabel)
+        self.addSubview(voteUpButton)
+        self.addSubview(voteDownButton)
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        voteUpButton.translatesAutoresizingMaskIntoConstraints = false
+        voteDownButton.translatesAutoresizingMaskIntoConstraints = false
+       
+        NSLayoutConstraint.activate([
+            titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16)
+        ])
+        NSLayoutConstraint.activate([
+            voteUpButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            voteUpButton.widthAnchor.constraint(equalToConstant: 22),
+            voteUpButton.heightAnchor.constraint(equalToConstant: 20)
 
-        voteUpButton.frame = CGRect(x: voteDownButton.frame.minX - Layout.voteUpInsets.right - Layout.imageSize.width,
-                                    y: (bounds.height - voteUpButton.intrinsicContentSize.height) / 2,
-                                    width: voteUpButton.intrinsicContentSize.width,
-                                    height: voteUpButton.intrinsicContentSize.height)
-
-        let rightOffset = voteUpButton.frame.width + voteDownButton.frame.width + Layout.voteUpInsets.right + Layout.voteDownInsets.right
-        titleLabel.frame = CGRect(x: Layout.titleInsets.left,
-                                  y: (bounds.height - titleLabel.font.lineHeight) / 2,
-                                  width: bounds.width - rightOffset - Layout.titleInsets.right,
-                                  height: titleLabel.font.lineHeight)
+        ])
+        NSLayoutConstraint.activate([
+            voteDownButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            voteDownButton.leadingAnchor.constraint(equalTo: voteUpButton.trailingAnchor, constant: 16),
+            voteDownButton.widthAnchor.constraint(equalToConstant: 22),
+            voteDownButton.heightAnchor.constraint(equalToConstant: 20),
+            voteDownButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16)
+        ])
 
         separator.frame = CGRect(x: 0,
                                  y: bounds.maxY,
@@ -105,24 +140,10 @@ class EstimationView: UIView {
             }
 
     static var viewHeight: CGFloat {
-        return 50
+        return 38
     }
-}
-
-extension EstimationView {
-
-    enum Action: Int {
-        case up
-        case down
-    }
-}
-
-extension EstimationView {
-
-    struct Layout {
-        static let titleInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 20)
-        static let voteUpInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        static let voteDownInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        static let imageSize = CGSize(width: 30, height: 30)
+    
+    @objc private func onButtonTapped() {
+        onEstimateAction?()
     }
 }

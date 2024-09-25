@@ -25,6 +25,9 @@ class ChatViewModel {
     var followMessage: String?
     var messages: [ChatMessage] = []
     var sessionToken: SessionToken?
+    var isTwoPoint = true
+    var point: String? = nil
+    var isSet: VoteResult?
 
     var user = Recipient(senderId: UUID().uuidString, displayName: "")
 
@@ -38,6 +41,7 @@ class ChatViewModel {
     private var isCanLoadMore = true
 
     private(set) var isEmployeeEstimated = true
+    var isEnableType = false
 
     private let settings = Settings()
 
@@ -128,7 +132,6 @@ class ChatViewModel {
         if !isConnected {
             sessionService?.connect()
         }
-
         sessionService?.sendEvent(event)
 
         updateMessageIfNeeded(event: event)

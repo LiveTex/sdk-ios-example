@@ -49,11 +49,13 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
 
         return dialogueStateView
     }()
-    
+    private var isExpended = false
     private lazy var avatarView = OperatorAvatarView()
     private lazy var estimationView = EstimationView()
+    private lazy var doubleEstimationView = DoubleEstimationView()
+    private lazy var fiveEstimationView = FiveEstimationView()
+    private lazy var estimationFiveView = EstimationFiveView()
     private lazy var messageInputBarView = MessageInputBarView()
-
     private lazy var barButton: UIBarButtonItem = {
         let activityIndicator = UIActivityIndicatorView(frame: Appearance.activityIndicatorRect)
 
@@ -69,7 +71,6 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         configureInputBar()
         configureViewModel()
         configureNavigationItem()
-        configureEstimationView()
     }
 
     override func viewDidLayoutSubviews() {
@@ -77,28 +78,151 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
 
         avatarView.frame = CGRect(origin: .zero, size: CGSize(width: 30, height: 30))
 
-        layoutEstimationView()
+        layoutView(isExpended: isExpended)
     }
 
     // MARK: - Configuration
+    
 
-    private func layoutEstimationView() {
-        let offset = viewModel.isEmployeeEstimated ? EstimationView.viewHeight : 0
-        estimationView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
-                                      y: view.safeAreaLayoutGuide.layoutFrame.minY,
-                                      width: view.safeAreaLayoutGuide.layoutFrame.width,
-                                      height: EstimationView.viewHeight)
+    private func layoutView(isExpended: Bool) {
+        if viewModel.isEnableType {
+            if viewModel.isTwoPoint {
+                view.addSubview(estimationView)
+                view.addSubview(doubleEstimationView)
+                doubleEstimationView.isHidden = !isExpended
+                estimationView.isHidden = isExpended
+                
+                let tapEstimation = UITapGestureRecognizer(target: self, action: #selector(handleTapEstimation))
+                let tapDoubleEstimation = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTapEstimation))
+                                
+                estimationView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
+                                              y: view.safeAreaLayoutGuide.layoutFrame.minY,
+                                              width: view.safeAreaLayoutGuide.layoutFrame.width,
+                                              height: EstimationView.viewHeight)
+                
+                doubleEstimationView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
+                                                    y: view.safeAreaLayoutGuide.layoutFrame.minY,
+                                                    width: view.safeAreaLayoutGuide.layoutFrame.width,
+                                                    height: DoubleEstimationView.viewHeight)
+                if estimationView.isHidden == false {
+                    messagesCollectionView.contentInset.top = EstimationView.viewHeight
+                    messagesCollectionView.verticalScrollIndicatorInsets.top = EstimationView.viewHeight
+                    estimationView.voteConfig(viewModel.point)
 
-        messagesCollectionView.contentInset.top = viewModel.isEmployeeEstimated ? 50 : EstimationView.viewHeight
-        messagesCollectionView.scrollIndicatorInsets.top = viewModel.isEmployeeEstimated ? 0 : EstimationView.viewHeight
-    }
-
-    private func configureEstimationView() {
-        view.addSubview(estimationView)
-
-        estimationView.onEstimateAction = { [weak self] action in
-            self?.viewModel.sendEvent(ClientEvent(.rating(action == .up ? "1" : "0")))
+                } else {
+                    messagesCollectionView.contentInset.top = DoubleEstimationView.viewHeight
+                    messagesCollectionView.verticalScrollIndicatorInsets.top =   DoubleEstimationView.viewHeight
+                }
+                doubleEstimationView.onDoubleEstimateAction = { [weak self] result in
+                    self?.handleDoubleTapEstimation()
+                    self?.estimationView.voteConfig(result)
+                    self?.viewModel.sendEvent(ClientEvent(.rating(VoteResult(type: TypeVote.doublePoint, value: result))))
+                }
+                
+                estimationView.onEstimateAction = { [weak self] in
+                    self?.handleTapEstimation()
+                }
+                
+                estimationView.addGestureRecognizer(tapEstimation)
+                estimationView.isUserInteractionEnabled = true
+                doubleEstimationView.addGestureRecognizer(tapDoubleEstimation)
+                doubleEstimationView.isUserInteractionEnabled = true
+            } else {
+                view.addSubview(estimationFiveView)
+                view.addSubview(fiveEstimationView)
+                fiveEstimationView.isHidden = !isExpended
+                estimationFiveView.isHidden = isExpended
+                
+                
+                let tapEstimation = UITapGestureRecognizer(target: self, action: #selector(handleTapFiveEstimation))
+                let tapDoubleEstimation = UITapGestureRecognizer(target: self, action: #selector(handleExTapFiveEstimation))
+                
+                
+                estimationFiveView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
+                                                  y: view.safeAreaLayoutGuide.layoutFrame.minY,
+                                                  width: view.safeAreaLayoutGuide.layoutFrame.width,
+                                                  height: EstimationFiveView.viewHeight)
+                
+                fiveEstimationView.frame = CGRect(x: view.safeAreaLayoutGuide.layoutFrame.minX,
+                                                    y: view.safeAreaLayoutGuide.layoutFrame.minY,
+                                                    width: view.safeAreaLayoutGuide.layoutFrame.width,
+                                                    height: FiveEstimationView.viewHeight)
+                if estimationFiveView.isHidden == false {
+                    messagesCollectionView.contentInset.top = EstimationFiveView.viewHeight
+                    messagesCollectionView.verticalScrollIndicatorInsets.top = EstimationFiveView.viewHeight
+                    estimationFiveView.voteConfig(viewModel.point)
+                } else {
+                    messagesCollectionView.contentInset.top =  FiveEstimationView.viewHeight
+                    messagesCollectionView.verticalScrollIndicatorInsets.top = FiveEstimationView.viewHeight
+                }
+                fiveEstimationView.onFiveEstimateAction = { [weak self] result in
+                    self?.handleExTapFiveEstimation()
+                    self?.estimationFiveView.voteConfig(result.description)
+                    self?.viewModel.sendEvent(ClientEvent(.rating(VoteResult(type: TypeVote.fivePoint, value: result.description))))
+                }
+                
+                estimationFiveView.onEstimateAction = { [weak self] in
+                    self?.handleTapFiveEstimation()
+                }
+                estimationFiveView.addGestureRecognizer(tapEstimation)
+                estimationFiveView.isUserInteractionEnabled = true
+                fiveEstimationView.addGestureRecognizer(tapDoubleEstimation)
+                fiveEstimationView.isUserInteractionEnabled = true
+            }
+            
+        } else {
+            estimationView.isHidden = true
+            doubleEstimationView.isHidden = true
+            estimationFiveView.isHidden = true
+            messagesCollectionView.contentInset.top =  0
+            messagesCollectionView.verticalScrollIndicatorInsets.top = 0
         }
+    }
+    
+    @objc func handleTapEstimation() {
+        estimationView.isHidden = true
+        doubleEstimationView.isHidden = false
+        isExpended = true
+        if viewModel.point != nil {
+            doubleEstimationView.resultVote = nil
+            doubleEstimationView.resetResult()
+        }
+        messagesCollectionView.contentInset.top =  DoubleEstimationView.viewHeight
+        messagesCollectionView.verticalScrollIndicatorInsets.top =  DoubleEstimationView.viewHeight
+    }
+    
+    @objc func handleDoubleTapEstimation() {
+        estimationView.isHidden = false
+        doubleEstimationView.isHidden = true
+        isExpended = false
+        doubleEstimationView.resultVote = nil
+        doubleEstimationView.resetResult()
+
+        messagesCollectionView.contentInset.top =   EstimationView.viewHeight
+        messagesCollectionView.verticalScrollIndicatorInsets.top =  EstimationView.viewHeight
+    }
+    
+    @objc func handleTapFiveEstimation() {
+        estimationFiveView.isHidden = true
+        fiveEstimationView.isHidden = false
+        isExpended = true
+        if viewModel.point != nil {
+            fiveEstimationView.rating = 0
+            fiveEstimationView.resetResult()
+        }
+        messagesCollectionView.contentInset.top = FiveEstimationView.viewHeight
+        messagesCollectionView.verticalScrollIndicatorInsets.top =  FiveEstimationView.viewHeight
+    }
+    
+    @objc func handleExTapFiveEstimation() {
+        estimationFiveView.isHidden = false
+        fiveEstimationView.isHidden = true
+        isExpended = false
+        fiveEstimationView.rating = 0
+        fiveEstimationView.resetResult()
+
+        messagesCollectionView.contentInset.top =  EstimationFiveView.viewHeight
+        messagesCollectionView.verticalScrollIndicatorInsets.top =  EstimationFiveView.viewHeight
     }
 
     private func configureNavigationItem() {
@@ -210,9 +334,27 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             self?.avatarView.setImage(with: URL(string: dialog.employee?.avatarUrl ?? ""))
             self?.shouldShowInput = dialog.showInput
             self?.handleInputStateIfNeeded(shouldShowInput: dialog.showInput)
-
+            if let rate = dialog.rate,
+               let enableType = rate.enabledType {
+                self?.viewModel.isEnableType = true
+                if enableType == .doublePoint {
+                    self?.viewModel.isTwoPoint = true
+                } else {
+                    self?.viewModel.isTwoPoint = false
+                }
+                if let set = rate.isSet {
+                    self?.viewModel.isSet = set
+                    if enableType == set.type {
+                        self?.viewModel.point = set.value
+                    } else {
+                        self?.viewModel.point = nil
+                    }
+                } else {
+                    self?.viewModel.isSet = nil
+                }
+            }
             UIView.animate(withDuration: 0.5) {
-                self?.layoutEstimationView()
+                self?.layoutView(isExpended: self?.isExpended ?? false)
             }
         }
 
@@ -296,6 +438,8 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         
         scrollsToLastItemOnKeyboardBeginsEditing = true
         maintainPositionOnInputBarHeightChanged = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        messagesCollectionView.addGestureRecognizer(tapGestureRecognizer)
     }
 
     @objc func openTokenView() {
@@ -306,7 +450,25 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             self?.viewModel.startSession(token: sessionInfo)
         }
     }
-
+    
+    @objc func handleTap(gestureRecognizer: UITapGestureRecognizer) {
+        
+        if doubleEstimationView.isHidden == false && viewModel.isTwoPoint == true  {
+            if viewModel.isSet == nil {
+                doubleEstimationView.resetResult()
+                estimationView.voteConfig(nil)
+            }
+            handleDoubleTapEstimation()
+        } else if fiveEstimationView.isHidden == false && viewModel.isTwoPoint == false   {
+            if  viewModel.isSet == nil {
+                fiveEstimationView.resetResult()
+                estimationFiveView.voteConfig()
+            }
+            handleExTapFiveEstimation()
+            
+        }
+    }
+    
     func createAuthorization(completionHandler: @escaping ((SessionToken) -> Void)) {
         let viewModel = VisitorViewModel(completionHandler: completionHandler)
         let vc = VisitorViewController(viewModel: viewModel)
