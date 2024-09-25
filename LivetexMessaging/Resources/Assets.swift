@@ -14,6 +14,10 @@ enum Asset: String {
     case account = "account"
     case voteUp = "vote_up"
     case voteDown = "vote_down"
+    case voteUpGray = "vote_up_gray"
+    case voteDownGray = "vote_down_gray"
+    case voteUpGreen = "vote_up_green"
+    case voteDownRed = "vote_down_red"
     case send = "send"
     case photo = "photo"
     case camera = "camera"
@@ -23,4 +27,6 @@ enum Asset: String {
     case shadowBackground = "shadow_background"
     case defaultBackground = "default_background"
     case fileAttachment = "file_attachment"
+    case rateDisableStar = "rateStar"
+    case rateEnableStar = "starFilled"
 }
