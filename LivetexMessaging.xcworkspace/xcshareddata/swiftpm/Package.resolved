@@ -1,5 +1,5 @@
 {
-  "originHash" : "6d8a4251d3b26ab3a0de041388e99c8d1554022dc0e8f5c5c4f7dd656f3e116d",
+  "originHash" : "32ea4272ce84a5543b360cde36d07e07282dea50c831402905f499975ba4f550",
   "pins" : [
     {
       "identity" : "bfrimageviewer",
@@ -11,12 +11,21 @@
       }
     },
     {
+      "identity" : "factory",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hmlongco/Factory",
+      "state" : {
+        "revision" : "fb04a8918848e413d3921d346a23bae7f81088d9",
+        "version" : "2.4.3"
+      }
+    },
+    {
       "identity" : "inputbaraccessoryview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nathantannar4/InputBarAccessoryView",
       "state" : {
-        "revision" : "039a9cb3ae8c5bc4d39242a6aa688b88023633d3",
-        "version" : "6.2.0"
+        "revision" : "c7acd5fa32e54cd7a44ad7eb9a7730da35b54c95",
+        "version" : "6.5.1"
       }
     },
     {
@@ -42,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MessageKit/MessageKit",
       "state" : {
-        "revision" : "1993e8e90d4e9a61b8d9bc8ceb733964ce943376",
-        "version" : "4.2.0"
+        "revision" : "b024c1287ac30fb6ea2ee07169e6193efc11d972",
+        "version" : "4.3.0"
       }
     },
     {
@@ -79,7 +88,7 @@
       "location" : "https://github.com/LiveTex/sdk-ios",
       "state" : {
         "branch" : "master",
-        "revision" : "7f65af91fb97e2557bbb9ff1b6fe92a62dcff80f"
+        "revision" : "7296d04ab1d7d6a8210e1cf181d29969a2d16520"
       }
     },
     {
@@ -88,7 +97,7 @@
       "location" : "https://github.com/LiveTex/sdk-ui-ios",
       "state" : {
         "branch" : "master",
-        "revision" : "8d7cd6c3f84eb3e14d10797c9b94a3e1e832ba57"
+        "revision" : "20224701f83ca174de82377196cfe08df3247b75"
       }
     }
   ],

@@ -77,7 +77,7 @@ class EstimationView: UIView {
         addSubview(separator)
     }
     
-    func voteConfig(_ rating: String?) {
+    func voteConfig(_ rating: String? = nil) {
         
         if let rating = rating {
             

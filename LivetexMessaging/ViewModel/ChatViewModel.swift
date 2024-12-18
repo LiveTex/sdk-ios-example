@@ -9,10 +9,12 @@
 import UIKit
 import MessageKit
 import LivetexCore
-
+import Combine
 
 class ChatViewModel {
 
+    var onReload: (() -> Void)?
+    var onDeleteElement: ((IndexSet) -> Void)?
     var onDepartmentReceived: (([Department]) -> Void)?
     var onLoadMoreMessages: (([ChatMessage]) -> Void)?
     var onMessagesReceived: (([ChatMessage]) -> Void)?
@@ -28,13 +30,15 @@ class ChatViewModel {
     var isTwoPoint = true
     var point: String? = nil
     var isSet: VoteResult?
-
+    var votedMessage: ChatMessage? = nil
     var user = Recipient(senderId: UUID().uuidString, displayName: "")
-
+    var departments: Departments?
+    var isSentName = CurrentValueSubject<Bool, Never>(true)
+    var eventDepartment = PassthroughSubject<[Department], Never>()
+    
     private(set) var sessionService: LivetexSessionService?
-
     private let loadMoreOffset = 20
-
+    private var isRated = true
     private(set) var isContentLoaded = false
     private(set) var isLoadingMore = false
 
@@ -71,7 +75,7 @@ class ChatViewModel {
                                               deviceToken: deviceToken)
         self.deviceToken = deviceToken
         loginService.requestAuthorization { [weak self] result in
-            DispatchQueue.main.async {
+           // DispatchQueue.main.async {
                 switch result {
                 case let .success(token):
                     self?.sessionToken = token
@@ -79,7 +83,7 @@ class ChatViewModel {
                 case let .failure(error):
                     print(error.localizedDescription)
                 }
-            }
+           // }
         }
     }
 
@@ -133,27 +137,82 @@ class ChatViewModel {
             sessionService?.connect()
         }
         sessionService?.sendEvent(event)
-
         updateMessageIfNeeded(event: event)
     }
 
     private func didReceive(event: ServiceEvent) {
         switch event {
         case let .result(result):
-            print(result)
+            print("Answer from back-end:", result)
         case let .state(result):
             isEmployeeEstimated = result.isEmployeeEstimated
-            onDialogStateReceived?(result)
+            if let rate = result.rate {
+                if result.status != .unassigned {
+                    onDialogStateReceived?(result)
+                } else {
+                    addRateMessage(result: rate)
+                }
+            } else {
+                onDialogStateReceived?(result)
+            }
         case .attributes:
             onAttributesReceived?()
         case let .departments(result):
-            onDepartmentReceived?(result.departments)
+            eventDepartment.send(result.departments)
         case let .update(result):
             messageHistoryReceived(items: result.messages)
         case .employeeTyping:
             onTypingReceived?()
         @unknown default:
             break
+        }
+    }
+    
+    func addRateMessage(result: Rate) {
+        var rate = Rate(enabledType: result.enabledType, commentEnabled: result.commentEnabled, textBefore: result.textBefore, textAfter: result.textAfter, isSet: result.isSet)
+        var newRate = ChatMessage(sender: Recipient(senderId: "Rate", displayName: ""), messageId: "", sentDate: Date(), kind: .custom(rate))
+          
+        if rate.isSet != nil {
+
+            if messages.isEmpty {
+                votedMessage = newRate
+            } else {
+           
+                guard let index = messages.lastIndex(where: { $0.sender.senderId == "Rate"}) else {
+                        return
+                    }
+                onDeleteElement?(IndexSet(integer: index))
+                    onReload?()
+                    onMessagesReceived?([newRate])
+                    isRated = true
+            }
+        } else {
+
+            if messages.isEmpty {
+                votedMessage = newRate
+
+            } else {
+                if messages.contains(where: { message in if case let .custom(data) = message.kind,
+                                                            var modelRate = data as? Rate, modelRate.isSet == nil {
+                    return true
+                } else {
+                    return false
+                } })  {
+                    return
+                } else {
+
+                    onMessagesReceived?([newRate])
+                    isRated = true
+                }
+            }
+        }
+    }
+    
+    func deleteRate() {
+        if let index = messages.lastIndex(where: { $0.sender.senderId == "Rate"}) {
+            
+            onDeleteElement?(IndexSet(integer: index))
+            onReload?()
         }
     }
 
@@ -187,25 +246,26 @@ class ChatViewModel {
             let kind: MessageKind
             let sender = $0.creator.isVisitor ? self.user : Recipient(senderId: "",
                                                                       displayName: $0.creator.employee?.name ?? "")
-            switch $0.content {
-            case let .text(text):
-                if text.isImageUrl {
-                    kind = .photo(File(url: text))
-                } else if text.first == ">" {
-                    let texts = text.trimmingCharacters(in: CharacterSet(charactersIn: "> ")).split(separator: "\n")
-                    kind = .custom(CustomType.follow(String(texts.first ?? ""), String(texts.last ?? "")))
-                } else {
-                    kind = $0.creator.type == .system ? .custom(CustomType.system(text)) : .text(text)
+                switch $0.content {
+                case let .text(text):
+                    if text.isImageUrl {
+                        kind = .photo(File(url: text))
+                    } else if text.first == ">" {
+                        let texts = text.trimmingCharacters(in: CharacterSet(charactersIn: "> ")).split(separator: "\n")
+                        kind = .custom(CustomType.follow(String(texts.first ?? ""), String(texts.last ?? "")))
+                    } else {
+                        kind = $0.creator.type == .system ? .custom(CustomType.system(text)) : .text(text)
+                    }
+                case let .file(attachment):
+                    if attachment.url.isImageUrl {
+                        kind = .photo(File(url: attachment.url))
+                    } else {
+                        kind = .custom(AttachmentFile(url: attachment.url, name: attachment.name))
+                    }
+                @unknown default:
+                    kind = .text("")
                 }
-            case let .file(attachment):
-                if attachment.url.isImageUrl {
-                    kind = .photo(File(url: attachment.url))
-                } else {
-                    kind = .custom(AttachmentFile(url: attachment.url, name: attachment.name))
-                }
-            @unknown default:
-                kind = .text("")
-            }
+         
 
             return ChatMessage(sender: sender,
                                messageId: $0.id,
@@ -214,6 +274,20 @@ class ChatViewModel {
                                creator: $0.creator,
                                keyboard: $0.keyboard)
         }
+    }
+    
+    func clearRate() {
+        var indexPathsToDelete: IndexSet = []
+        if isRated == true {
+            messages.enumerated().forEach { index, element in
+                if element.sender.senderId == "Rate" {
+                    indexPathsToDelete.insert(index)
+                }
+            }
+                onDeleteElement?(indexPathsToDelete)
+                onReload?()
+                }
+                isRated = false
     }
 
     private func messageHistoryReceived(items: [Message]) {
@@ -224,7 +298,6 @@ class ChatViewModel {
         DispatchQueue.global(qos: .userInitiated).async {
             
             self.isLoadingMore = false
-            //   var newMessages = self.convertMessages(items)
             var newMessages = Array(Set(self.convertMessages(items)).subtracting(self.messages))
             if newMessages.count != self.messages.count || self.messages.count == 1 {
                 let currentDate = self.messages.first?.sentDate ?? Date()
@@ -234,9 +307,13 @@ class ChatViewModel {
                     if !self.messages.isEmpty, receivedDate.compare(currentDate) == .orderedAscending {
                         self.onLoadMoreMessages?(newMessages)
                     } else {
+                        if let voted = self.votedMessage {
+                            newMessages.append(voted)
+                        }
                         self.onMessagesReceived?(newMessages)
                         self.isContentLoaded = true
                     }
+                    self.votedMessage = nil
                 }
             }
         }
