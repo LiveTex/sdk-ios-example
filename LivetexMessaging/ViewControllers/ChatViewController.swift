@@ -14,6 +14,7 @@ import SafariServices
 import BFRImageViewer
 import LivetexCore
 import UniformTypeIdentifiers
+import Combine
 
 class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate {
 
@@ -61,6 +62,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
 
         return UIBarButtonItem(customView: activityIndicator)
     }()
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Lifecycle
 
@@ -71,6 +73,8 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         configureInputBar()
         configureViewModel()
         configureNavigationItem()
+        
+        setAction()
     }
 
     override func viewDidLayoutSubviews() {
@@ -82,8 +86,30 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
     }
 
     // MARK: - Configuration
+    private func setAction() {
+        doubleEstimationView.onDoubleEstimateAction = { [weak self] result in
+            self?.handleDoubleTapEstimation()
+            self?.viewModel.point = result
+            self?.estimationView.voteConfig(result)
+            self?.viewModel.sendEvent(ClientEvent(.rating (SendVoteResult(type: TypeVote.doublePoint, value: result), nil)))
+        }
+        
+        estimationView.onEstimateAction = { [weak self] in
+            self?.handleTapEstimation()
+        }
+        
+        fiveEstimationView.onFiveEstimateAction = { [weak self] result in
+            self?.handleExTapFiveEstimation()
+            self?.viewModel.point = result.description
+            self?.estimationFiveView.voteConfig(result.description)
+            self?.viewModel.sendEvent(ClientEvent(.rating(SendVoteResult(type: TypeVote.fivePoint, value: result.description), nil)))
+        }
+        
+        estimationFiveView.onEstimateAction = { [weak self] in
+            self?.handleTapFiveEstimation()
+        }
+    }
     
-
     private func layoutView(isExpended: Bool) {
         if viewModel.isEnableType {
             if viewModel.isTwoPoint {
@@ -112,15 +138,6 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                 } else {
                     messagesCollectionView.contentInset.top = DoubleEstimationView.viewHeight
                     messagesCollectionView.verticalScrollIndicatorInsets.top =   DoubleEstimationView.viewHeight
-                }
-                doubleEstimationView.onDoubleEstimateAction = { [weak self] result in
-                    self?.handleDoubleTapEstimation()
-                    self?.estimationView.voteConfig(result)
-                    self?.viewModel.sendEvent(ClientEvent(.rating(VoteResult(type: TypeVote.doublePoint, value: result))))
-                }
-                
-                estimationView.onEstimateAction = { [weak self] in
-                    self?.handleTapEstimation()
                 }
                 
                 estimationView.addGestureRecognizer(tapEstimation)
@@ -155,15 +172,6 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                     messagesCollectionView.contentInset.top =  FiveEstimationView.viewHeight
                     messagesCollectionView.verticalScrollIndicatorInsets.top = FiveEstimationView.viewHeight
                 }
-                fiveEstimationView.onFiveEstimateAction = { [weak self] result in
-                    self?.handleExTapFiveEstimation()
-                    self?.estimationFiveView.voteConfig(result.description)
-                    self?.viewModel.sendEvent(ClientEvent(.rating(VoteResult(type: TypeVote.fivePoint, value: result.description))))
-                }
-                
-                estimationFiveView.onEstimateAction = { [weak self] in
-                    self?.handleTapFiveEstimation()
-                }
                 estimationFiveView.addGestureRecognizer(tapEstimation)
                 estimationFiveView.isUserInteractionEnabled = true
                 fiveEstimationView.addGestureRecognizer(tapDoubleEstimation)
@@ -174,6 +182,9 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             estimationView.isHidden = true
             doubleEstimationView.isHidden = true
             estimationFiveView.isHidden = true
+            estimationFiveView.voteConfig(nil)
+            estimationView.voteConfig(nil)
+            viewModel.point = nil
             messagesCollectionView.contentInset.top =  0
             messagesCollectionView.verticalScrollIndicatorInsets.top = 0
         }
@@ -263,40 +274,66 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             self?.setConnectedState() :
             self?.setConnectingState()
         }
-
-        viewModel.onDepartmentReceived = { [weak self] departments in
-            guard let self = self, !departments.isEmpty else {
-                return
-            }
-
-            let minDepartments = 1
-            guard departments.count > minDepartments else {
-                self.viewModel.sendEvent(ClientEvent(.department(departments.first?.id ?? "")))
-                return
-            }
-
-            let actions = departments.map { department in
-                return UIAlertAction(title: department.name, style: .default) { _ in
-                    self.viewModel.sendEvent(ClientEvent(.department(department.id)))
-                    self.handleInputStateIfNeeded(shouldShowInput: self.shouldShowInput)
+    
+        viewModel.isSentName
+            .combineLatest(viewModel.eventDepartment)
+            .sink { [weak self] (isSentName, departments) in
+                guard let self = self, !departments.isEmpty else {
+                    return
+                }
+                if isSentName {
+                    let minDepartments = 1
+                    guard departments.count > minDepartments else {
+                        self.viewModel.sendEvent(ClientEvent(.department(departments.first?.id ?? "")))
+                        self.viewModel.clearRate()
+                        self.viewModel.eventDepartment.send([])
+                        return
+                    }
+                    
+                    let actions = departments.map { department in
+                        return UIAlertAction(title: department.name, style: .default) { _ in
+                            self.viewModel.sendEvent(ClientEvent(.department(department.id)))
+                            self.viewModel.clearRate()
+                            self.handleInputStateIfNeeded(shouldShowInput: self.shouldShowInput)
+                            self.viewModel.eventDepartment.send([])
+                        }
+                    }
+                    
+                    let alertController = UIAlertController(title: "Выбор отдела",
+                                                            message: "Выберите куда направить ваше обращение",
+                                                            preferredStyle: .actionSheet)
+                    alertController.addActions(actions)
+                    self.present(alertController, animated: true)
                 }
             }
-            
-            let alertController = UIAlertController(title: "Выбор отдела",
-                                                    message: "Выберите куда направить ваше обращение",
-                                                    preferredStyle: .actionSheet)
-            alertController.addActions(actions)
-            self.present(alertController, animated: true)
-        }
-
+            .store(in: &cancellables)
+        
         viewModel.onLoadMoreMessages = { [weak self] newMessages in
             self?.viewModel.messages.insert(contentsOf: newMessages, at: 0)
             self?.messagesCollectionView.reloadDataAndKeepOffset()
         }
-
+        
         viewModel.onMessageUpdated = { [weak self] index in
             self?.messagesCollectionView.performBatchUpdates({
                 self?.messagesCollectionView.reloadSections(IndexSet(integer: index))
+            }, completion: nil)
+        }
+        
+        viewModel.onDeleteElement = { [weak self] index in
+            index.reversed().forEach { index in
+                self?.viewModel.messages.remove(at: index)
+            }
+            
+            self?.messagesCollectionView.performBatchUpdates({
+                
+                self?.messagesCollectionView.deleteSections(index)
+            }, completion: nil)
+        }
+        
+        viewModel.onReload = { [weak self]  in
+            self?.messagesCollectionView.performBatchUpdates({
+                self?.messagesCollectionView.reloadData()
+                
             }, completion: nil)
         }
         
@@ -304,16 +341,16 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             guard let self = self else {
                 return
             }
-
+            
             let updates = {
-                    self.messagesCollectionView.performBatchUpdates({
-                        let count = self.viewModel.messages.count
-                        let indexSet = IndexSet(integersIn: count..<count + newMessages.count)
-                        self.viewModel.messages.append(contentsOf: newMessages)
-                        self.messagesCollectionView.insertSections(indexSet)
-                    }, completion: { _ in
-                        self.messagesCollectionView.scrollToLastItem(at: .top, animated: true)
-                    })
+                self.messagesCollectionView.performBatchUpdates({
+                    let count = self.viewModel.messages.count
+                    let indexSet = IndexSet(integersIn: count..<count + newMessages.count)
+                    self.viewModel.messages.append(contentsOf: newMessages)
+                    self.messagesCollectionView.insertSections(indexSet)
+                }, completion: { _ in
+                    self.messagesCollectionView.scrollToLastItem(at: .top, animated: true)
+                })
             }
             if self.viewModel.messages.isEmpty {
                 updates()
@@ -321,10 +358,10 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                 if self.isTypingIndicatorHidden {
                     updates()
                 } else {
-                        self.setTypingIndicatorViewHidden(true,
-                                                          animated: true,
-                                                          whilePerforming: updates,
-                                                          completion: nil)
+                    self.setTypingIndicatorViewHidden(true,
+                                                      animated: true,
+                                                      whilePerforming: updates,
+                                                      completion: nil)
                 }
             }
         }
@@ -351,11 +388,14 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                     }
                 } else {
                     self?.viewModel.isSet = nil
+                    self?.viewModel.point = nil
                 }
+            } else {
+                self?.viewModel.deleteRate()
             }
-            UIView.animate(withDuration: 0.5) {
-                self?.layoutView(isExpended: self?.isExpended ?? false)
-            }
+                UIView.animate(withDuration: 0.5) { [weak self] in
+                    self?.layoutView(isExpended: self?.isExpended ?? false)
+                }
         }
 
 
@@ -367,10 +407,11 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
             })
         }
         viewModel.onAttributesReceived = { [weak self] in
+            self?.viewModel.isSentName.send(false)
             let alertController = UIAlertController(title: "Атрибуты",
                                                     message: "Необходимо указать обязательные атрибуты",
                                                     preferredStyle: .alert)
-
+            
             let placeholder = NSMutableAttributedString(string: "* Имя")
             placeholder.setAttributes([.foregroundColor: UIColor.red,
                                        .baselineOffset: 1],
@@ -394,6 +435,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                 self?.viewModel.user.displayName = alertController.textFields?[0].text ?? ""
                 self?.viewModel.sendEvent(ClientEvent(.attributes(attributes)))
                 self?.handleInputStateIfNeeded(shouldShowInput: self?.shouldShowInput)
+                self?.viewModel.isSentName.send(true)
             }
             alertController.addActions(accept)
             self?.present(alertController, animated: true)
@@ -408,6 +450,7 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         messagesCollectionView.register(AttachmentCollectionViewCell.self)
         messagesCollectionView.register(ActionsReusableView.self,
                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
+        messagesCollectionView.register(RateViewCell.self)
         messagesCollectionView.delegate = self
         messagesCollectionView.messageCellDelegate = self
         messagesCollectionView.messagesDataSource = self
@@ -544,7 +587,6 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
             fatalError("Ouch. nil data source for messages")
         }
-
         guard !isSectionReservedForTypingIndicator(indexPath.section) else {
             return super.collectionView(collectionView, cellForItemAt: indexPath)
         }
@@ -567,6 +609,36 @@ class ChatViewController: MessagesViewController, InputBarAccessoryViewDelegate 
                 return cell
             }
             
+            if value is Rate {
+                let cell = messagesCollectionView.dequeueReusableCell(RateViewCell.self, for: indexPath)
+                if let message = value as? Rate {
+                    
+                    if let setRate = message.isSet {
+                        if setRate.type == .fivePoint {
+                            cell.config(isComment: message.commentEnabled, isTwoPoint: false, beforTitle: message.textBefore ?? "", afterTitle: message.textAfter ?? "", setRate: setRate)
+                        } else {
+                            cell.config(isComment: message.commentEnabled, isTwoPoint: true, beforTitle: message.textBefore ?? "", afterTitle: message.textAfter ?? "", setRate: setRate)
+                        }
+                    } else {
+                        if message.enabledType == .fivePoint {
+                            cell.config(isComment: message.commentEnabled, isTwoPoint: false, beforTitle: message.textBefore ?? "", afterTitle: "")
+                        } else {
+                            cell.config(isComment: message.commentEnabled, isTwoPoint: true, beforTitle: message.textBefore ?? "", afterTitle: "")
+                        }
+                        cell.action = { [weak self] rate, text in
+                            if let type = message.enabledType,
+                               let rate = rate {
+                                self?.viewModel.sendEvent(ClientEvent(.rating(SendVoteResult(type: type, value: rate.description), text)))
+                            }
+                        }
+                        
+                        cell.actionKeyboard = { [weak self] in
+                            self?.messagesCollectionView.scrollToLastItem()
+                        }
+                    }
+                }
+                return cell
+            }
             guard let type = value as? CustomType else {
                 return super.collectionView(collectionView, cellForItemAt: indexPath)
             }
@@ -823,7 +895,7 @@ extension ChatViewController: MessagesDisplayDelegate {
                              in messagesCollectionView: MessagesCollectionView) {
         let placeholderImage = UIImage(asset: .account)
         guard let chatMessage = message as? ChatViewModel.ChatMessage,
-              let urlString = chatMessage.creator.employee?.avatarUrl,
+              let urlString = chatMessage.creator?.employee?.avatarUrl,
               let resourceURL = URL(string: urlString) else {
                   avatarView.backgroundColor = .clear
                   avatarView.set(avatar: Avatar(image: placeholderImage))

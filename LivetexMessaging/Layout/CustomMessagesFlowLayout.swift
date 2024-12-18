@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageKit
+import LivetexCore
 
 class CustomMessagesFlowLayout: MessagesCollectionViewFlowLayout {
 
@@ -15,6 +16,7 @@ class CustomMessagesFlowLayout: MessagesCollectionViewFlowLayout {
     private lazy var customTextMessageSizeCalculator = CustomTextMessageSizeCalculator(layout: self)
     private lazy var systemMessageSizeCalculator = SystemMessageSizeCalculator(layout: self)
     private lazy var attachmentFileSizeCalculator = AttachmentFileSizeCalculator(layout: self)
+    private lazy var rateViewSizeCalculator = RateViewSizeCalculator(layout: self)
 
     override class var layoutAttributesClass: AnyClass {
         return CustomMessagesCollectionViewLayoutAttributes.self
@@ -54,6 +56,11 @@ class CustomMessagesFlowLayout: MessagesCollectionViewFlowLayout {
             if value is ChatViewModel.AttachmentFile {
                 return attachmentFileSizeCalculator
             }
+            
+            if value is Rate {
+                return rateViewSizeCalculator
+            }
+            
             guard let type = value as? CustomType else {
                 return super.cellSizeCalculatorForItem(at: indexPath)
             }
@@ -74,6 +81,7 @@ class CustomMessagesFlowLayout: MessagesCollectionViewFlowLayout {
         calculators.append(customTextMessageSizeCalculator)
         calculators.append(systemMessageSizeCalculator)
         calculators.append(followTextMessageSizeCalculator)
+        calculators.append(rateViewSizeCalculator)
         return calculators
     }
 

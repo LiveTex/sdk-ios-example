@@ -10,7 +10,6 @@ import UIKit
 
 class EstimationFiveView: UIView {
 
-    var resultVote = 0
     var onEstimateAction: (() -> Void)?
     var firstStarImageView = UIImageView()
     var secondStarImageView = UIImageView()
@@ -73,7 +72,6 @@ class EstimationFiveView: UIView {
     }
     
     func voteConfig(_ resultVote: String? = nil) {
-        
         switch resultVote {
         case nil:
             firstStarImageView.image = UIImage(asset: .rateDisableStar)
